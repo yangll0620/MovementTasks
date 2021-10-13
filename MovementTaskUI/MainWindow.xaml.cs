@@ -19,37 +19,45 @@ namespace MovementTaskUI
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            cbo_selectTask.SelectedIndex = 0; 
+            cbo_selectTask.SelectedIndex = 0;
         }
         private void Btn_OK_Click(object sender, RoutedEventArgs e)
         {
-            String taskName = cbo_selectTask.SelectedItem.ToString();
-            switch (taskName)
+            string taskShowName = cbo_selectTask.SelectedItem.ToString();
+            string taskPrjName;
+            switch (taskShowName)
             {
                 case "Selfpaced Task":
+                    taskPrjName = "SelfpacedTask";
                     break;
                 case "GoNogo Task":
-                    try
-                    {
-                        using (Process taskProcess = new Process())
-                        {
-                            taskProcess.StartInfo.UseShellExecute = false;
-                            taskProcess.StartInfo.FileName = @"..\\..\\..\\GoNogoTask\\bin\\Debug\\GoNogoTask.exe";
-                            taskProcess.StartInfo.CreateNoWindow = true;
-                            taskProcess.Start();
-                            // This code assumes the process you are starting will terminate itself.
-                            // Given that it is started without a window so you cannot terminate it
-                            // on the desktop, it must terminate itself or you can do it programmatically
-                            // from this application using the Kill method.
-                        }
-                    }
-                    catch (Exception)
-                    { }
+                    taskPrjName = "GoNogoTask";
                     break;
                 case "COT Task":
+                    taskPrjName = "COTTask";
                     break;
                 default:
+                    taskPrjName = "";
                     break;
+            }
+
+            // Open Selected Task
+            string movementTaskFolder = Path.GetFullPath(@"..\\..\\..\\");
+            string debugSubPath = Path.Combine("bin", "Debug");
+            string taskExeFileName = Path.Combine(movementTaskFolder, taskPrjName, debugSubPath, taskPrjName + ".exe");
+            try
+            {
+                using (Process taskProcess = new Process())
+                {
+                    taskProcess.StartInfo.UseShellExecute = false;
+                    taskProcess.StartInfo.FileName = taskExeFileName;
+                    taskProcess.StartInfo.CreateNoWindow = true;
+                    taskProcess.Start();
+                }
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(error.Message, "Can't Open Task");
             }
         }
     }

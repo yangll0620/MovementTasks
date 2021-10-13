@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MovementTaskUI"
         mc:Ignorable="d"
         Title="Select Task" Loaded="Window_Loaded"
-        Height="150" Width="250">
+        Height="150" Width="300">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -37,8 +37,6 @@
                     Content="OK" HorizontalAlignment="Right" VerticalAlignment="Bottom" 
                     Margin="0,0,10,10"  Width="60" Height="30" Click="Btn_OK_Click" />
 
-            <TextBlock x:Name="textBlock_1" Text="1" Margin="10 5 0 0"/>
-            <TextBlock x:Name="textBlock_2" Text="2" Margin="10 25 0 0"/>
         </Grid>
     </Grid>
 </Window>
