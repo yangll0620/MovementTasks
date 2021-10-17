@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MovementTasks.Properties
+namespace TasksShared.Properties
 {
 
 

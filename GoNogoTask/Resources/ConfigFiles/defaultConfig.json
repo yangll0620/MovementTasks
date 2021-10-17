@@ -1,0 +1,56 @@
+{
+  "NHP Name": "Barb",
+  "noGo Trial Num Per Position Per Session": 2,
+  "Times": {
+    "Ready Show Time Range": [
+      2.0,
+      2.0
+    ],
+    "Cue Show Time Range": [
+      2.0,
+      2.0
+    ],
+    "Nogo Show Time Range": [
+      1.5,
+      1.5
+    ],
+    "Max Reaction Time": 0.8,
+    "Max Reach Time": 0.8,
+    "Visual Feedback Show Time": 1.0,
+    "Inter Trials Time": 0,
+    "Juice Correct Given Time": 0.8
+  },
+  "Target": {
+    "Target Diameter (Inch)": 3.0,
+    "Target No of Positions": 3,
+    "Optional Positions": [
+      [
+        396,
+        0
+      ],
+      [
+        -396,
+        0
+      ],
+      [
+        0,
+        -396
+      ]
+    ]
+  },
+  "Colors": {
+    "Go Fill Color": "Green",
+    "noGo Fill Color": "Yellow",
+    "Cue Crossing Color": "Black",
+    "Wait Trial Start Background": "Black",
+    "Trial Background": "WhiteSmoke",
+    "Correct Fill": "Magenta",
+    "Correct Outline": "Magenta",
+    "Error Fill": "WhiteSmoke",
+    "Error Outline": "Red"
+  },
+  "audioFile_Correct": "default",
+  "audioFile_Error": "default",
+  "saved folder": "default",
+  "Total Trial Num Per Position Per Session": 10
+}
