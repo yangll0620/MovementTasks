@@ -54,6 +54,10 @@ namespace TasksShared
             JsonString2BaseMainConfig(config);
         }
 
+        public void SaveTouchJsonString2TxtFile(string txtSavedfile)
+        {
+            SaveBaseJsonString2TxtFile(txtSavedfile);
+        }
     }
 
     public class TouchTimeConfig : BaseTimeConfig
@@ -73,6 +77,18 @@ namespace TasksShared
             t_MaxReactionTimeS = float.Parse((string)configTime["Max Reaction Time"]);
             tRange_ReadyTimeS = new float[] { float.Parse((string)configTime["Ready Show Time Range"][0]), float.Parse((string)configTime["Ready Show Time Range"][1]) };
         }
+        public void SaveTouchJsonTimeString2TxtFile(string txtSavedfile)
+        {
+            SaveBaseJsonTimeString2TxtFile(txtSavedfile);
+            using (StreamWriter file = File.AppendText(txtSavedfile))
+            {
+                // Save Time Settings
+                file.WriteLine(String.Format("{0, -40}:  {1}", "Max Reaction Time (s)", t_MaxReactionTimeS.ToString()));
+                file.WriteLine(String.Format("{0, -40}:  [{1} {2}]", "Ready Interface Show Time Range (s)", tRange_ReadyTimeS[0].ToString(), tRange_ReadyTimeS[1].ToString()));
+            }
+        }
+
+  
     }
 
     public class TouchTargetNumPosConfig
@@ -97,6 +113,21 @@ namespace TasksShared
                 int a = int.Parse((string)xyPos[0]);
                 int b = int.Parse((string)xyPos[1]);
                 optPostions_OCenter_List.Add(new int[] { a, b });
+            }
+        }
+
+        public void SaveTouchJsonTouchGoTargetNumPosString2TxtFile(string txtSavedfile)
+        {
+            using (StreamWriter file = File.AppendText(txtSavedfile))
+            {
+                file.WriteLine(String.Format("{0, -40}:  {1}", "Target Diameter (Inch)", targetDiaInch.ToString()));
+                file.WriteLine(String.Format("{0, -40}:  {1}", "Number of Target Positions", targetNoOfPositions.ToString()));
+                file.WriteLine("Center Coordinates of Each Target (Pixal, (0,0) in Screen Center, Right and Down Direction is Positive):");
+                for (int i = 0; i < optPostions_OCenter_List.Count; i++)
+                {
+                    int[] position = optPostions_OCenter_List[i];
+                    file.WriteLine(String.Format("{0, -40}:{1}, {2}", "Postion " + i.ToString(), position[0], position[1]));
+                }
             }
         }
     }
@@ -131,6 +162,20 @@ namespace TasksShared
             CorrOutlineColorStr = (string)configColors["Correct Outline"];
             ErrorFillColorStr = (string)configColors["Error Fill"];
             ErrorOutlineColorStr = (string)configColors["Error Outline"];
+        }
+
+
+        public void SaveTouchJsonColorString2TxtFile(string txtSavedfile)
+        {
+            SaveBaseJsonString2TxtFile(txtSavedfile); 
+            using (StreamWriter file = File.AppendText(txtSavedfile))
+            {
+                file.WriteLine(String.Format("{0, -40}:  {1}", "Go Target Fill Color", goFillColorStr));
+                file.WriteLine(String.Format("{0, -40}:  {1}", "Fill Color for Correct Feedback", CorrFillColorStr));
+                file.WriteLine(String.Format("{0, -40}:  {1}", "Outline Color for Correct Feedback", CorrOutlineColorStr));
+                file.WriteLine(String.Format("{0, -40}:  {1}", "Fill Color for Error Feedback", ErrorFillColorStr));
+                file.WriteLine(String.Format("{0, -40}:  {1}", "Outline Color for Error Feedback", ErrorOutlineColorStr));
+            }
         }
     }
 }

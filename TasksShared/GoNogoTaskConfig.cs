@@ -63,6 +63,17 @@ namespace TasksShared
             totalTrialNumPerPosSess = (int)config["Total Trial Num Per Position Per Session"];
             nogoTrialNumPerPosSess = (int)config["noGo Trial Num Per Position Per Session"];
         }
+
+
+        public void SaveGoNogoMainConfig2TxtFile(string txtSavedfile)
+        {
+            SaveTouchJsonString2TxtFile(txtSavedfile);
+            using (StreamWriter file = File.AppendText(txtSavedfile))
+            {
+                file.WriteLine(String.Format("{0, -40}:  {1}", "Total Trial Number Per Position Per Session", totalTrialNumPerPosSess.ToString()));
+                file.WriteLine(String.Format("{0, -40}:  {1}", "noGo Trial Num Per Position Per Session", nogoTrialNumPerPosSess.ToString()));
+            }
+        }
     }
 
 
@@ -82,6 +93,18 @@ namespace TasksShared
             tRange_CueTimeS = new float[] { float.Parse((string)configTime["Cue Show Time Range"][0]), float.Parse((string)configTime["Cue Show Time Range"][1]) };
             tRange_NogoShowTimeS = new float[] { float.Parse((string)configTime["Nogo Show Time Range"][0]), float.Parse((string)configTime["Nogo Show Time Range"][1]) };
         }
+
+
+        public void SaveGoNogoJsonTimeString2TxtFile(string txtSavedfile)
+        {
+            SaveTouchJsonTimeString2TxtFile(txtSavedfile);
+            using (StreamWriter file = File.AppendText(txtSavedfile))
+            {
+                // Save Time Settings
+                file.WriteLine(String.Format("{0, -40}:  [{1} {2}]", "Cue Interface Show Time Range (s)", tRange_CueTimeS[0].ToString(), tRange_CueTimeS[1].ToString()));
+                file.WriteLine(String.Format("{0, -40}:  [{1} {2}]", "Nogo Interface Show Range Time (s)", tRange_NogoShowTimeS[0].ToString(), tRange_NogoShowTimeS[1].ToString()));
+            }
+        }
     }
 
     public class GoNogoTargetNumPosConfig : TouchTargetNumPosConfig
@@ -89,6 +112,11 @@ namespace TasksShared
         public void JsonObject2GoNogoTargetConfig(JObject configTargetNumPos)
         {
             JsonObject2TouchGoTargetConfig(configTargetNumPos);
+        }
+
+        public void SaveGoNogoJsonTouchGoTargetNumPosString2TxtFile(string txtSavedfile)
+        {
+            SaveTouchJsonTouchGoTargetNumPosString2TxtFile(txtSavedfile);
         }
     }
 
@@ -108,6 +136,17 @@ namespace TasksShared
 
             nogoFillColorStr = (string)configColors["noGo Fill Color"];
             cueCrossingColorStr = (string)configColors["Cue Crossing Color"];
+        }
+
+        public void SaveGoNogoJsonColorString2TxtFile(string txtSavedfile)
+        {
+            SaveTouchJsonColorString2TxtFile(txtSavedfile);
+            using (StreamWriter file = File.AppendText(txtSavedfile))
+            {
+                // Save Time Settings
+                file.WriteLine(String.Format("{0, -40}:  {1}", "Crossing Cue Color", cueCrossingColorStr));
+                file.WriteLine(String.Format("{0, -40}:  {1}", "Nogo Target Fill Color", nogoFillColorStr));
+            }
         }
 
     }

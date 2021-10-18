@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -59,6 +60,16 @@ namespace TasksShared
             audioFile_Correct = (string)config["audioFile_Correct"];
             audioFile_Error = (string)config["audioFile_Error"];
         }
+
+        public void SaveBaseJsonString2TxtFile(string txtSavedfile)
+        {
+            using (StreamWriter file = File.AppendText(txtSavedfile))
+            {
+                file.WriteLine(String.Format("{0, -40}:  {1}", "saved folder", savedFolder));
+                file.WriteLine(String.Format("{0, -40}:  {1}", "audioFile_Correct", audioFile_Correct));
+                file.WriteLine(String.Format("{0, -40}:  {1}", "audioFile_Error", audioFile_Error));
+            }
+        }
     }
 
 
@@ -84,6 +95,18 @@ namespace TasksShared
             t_VisfeedbackShowS = float.Parse((string)configTime["Visual Feedback Show Time"]);
             t_JuicerCorrectGivenS = float.Parse((string)configTime["Juice Correct Given Time"]);
         }
+
+        public void SaveBaseJsonTimeString2TxtFile(string txtSavedfile)
+        {
+            using (StreamWriter file = File.AppendText(txtSavedfile))
+            {
+                // Save Time Settings
+                file.WriteLine(String.Format("{0, -40}:  {1}", "Max Reach Time (s)", t_MaxReachTimeS.ToString()));
+                file.WriteLine(String.Format("{0, -40}:  {1}", "Inter-Trial Time (s)", t_InterTrialS.ToString()));
+                file.WriteLine(String.Format("{0, -40}:  {1}", "Visual Feedback Time (s)", t_VisfeedbackShowS.ToString()));
+                file.WriteLine(String.Format("{0, -40}:  {1}", "Correct Given Juicer Time (s)", t_JuicerCorrectGivenS.ToString()));
+            }
+        }
     }
 
 
@@ -99,6 +122,15 @@ namespace TasksShared
         {
             BKWaitTrialColorStr = (string)configColors["Wait Trial Start Background"];
             BKTrialColorStr = (string)configColors["Trial Background"];
+        }
+
+        public void SaveBaseJsonString2TxtFile(string txtSavedfile)
+        {
+            using (StreamWriter file = File.AppendText(txtSavedfile))
+            {
+                file.WriteLine(String.Format("{0, -40}:  {1}", "Wait Trial Start Background", BKWaitTrialColorStr));
+                file.WriteLine(String.Format("{0, -40}:  {1}", "Trial Background", BKTrialColorStr));
+            }
         }
     }
 }

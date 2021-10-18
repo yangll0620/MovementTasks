@@ -7,6 +7,7 @@ namespace TasksShared
     public class Utility
     {
         static public int ratioIn2Pixal = 96;
+        static public float ratioCM2Pixal = (float)96 / (float)2.54;
 
         public static int Inch2Pixal(float inlen)
         {/* convert length with unit inch to unit pixal, 96 pixals = 1 inch = 2.54 cm

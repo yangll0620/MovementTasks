@@ -187,7 +187,7 @@ namespace GoNogoTask
 
             int targetRadius = Utility.Inch2Pixal(float.Parse(textBox_targetDiaInch.Text)) / 2;
 
-            sd.Rectangle Rect_presentScreen = ScreenDetect.TaskPresentationScreen().Bounds;
+            sd.Rectangle Rect_presentScreen = ScreenDetect.TaskPresentTouchScreen().Bounds;
             int shorter = (Rect_presentScreen.Height > Rect_presentScreen.Width) ? Rect_presentScreen.Width : Rect_presentScreen.Height;
             int radius = (shorter / 2) - targetRadius;
             List<int[]> optPostions_OCenter_List = Utility.GenDefaultPositions_GoNogoTask(targetNoOfPositions, radius);
@@ -246,7 +246,7 @@ namespace GoNogoTask
 
             //Show the Win_allTargets on the Touch Screen
             Window Win_allTargets = new Window();
-            sd.Rectangle Rect_presentScreen = ScreenDetect.TaskPresentationScreen().Bounds;
+            sd.Rectangle Rect_presentScreen = ScreenDetect.TaskPresentTouchScreen().Bounds;
             Win_allTargets.Top = Rect_presentScreen.Top;
             Win_allTargets.Left = Rect_presentScreen.Left;
 
@@ -298,7 +298,7 @@ namespace GoNogoTask
             foreach (int[] cPoint_Pos_OCenter in postions_OriginCenter_List)
             {
                 // Change the cPoint  into Top Left Coordinate System
-                sd.Rectangle Rect_touchScreen = ScreenDetect.TaskPresentationScreen().Bounds;
+                sd.Rectangle Rect_touchScreen = ScreenDetect.TaskPresentTouchScreen().Bounds;
                 int[] cPoint_Pos_OTopLeft = new int[] { cPoint_Pos_OCenter[0] + Rect_touchScreen.Width / 2, cPoint_Pos_OCenter[1] + Rect_touchScreen.Height / 2 };
 
                 Ellipse circle = ShapeManipulate.Create_Circle((double)targetDiaPixal, new SolidColorBrush(targetColor));

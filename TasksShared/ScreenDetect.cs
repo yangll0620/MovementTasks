@@ -32,11 +32,11 @@ namespace TasksShared
             return taskUIScreen;
         }
 
-        public static Screen TaskPresentationScreen()
-        {/* Return the  Screen for Showing the Task Presentation*/
-            Screen taskPresentScreen = Screen.PrimaryScreen;
+        public static Screen TaskPresentTouchScreen()
+        {/* Return the Touch Screen for Showing the Task Presentation*/
+            Screen taskPresentTouchScreen = Screen.PrimaryScreen;
 
-            return taskPresentScreen;
+            return taskPresentTouchScreen;
         }
     }
 }
