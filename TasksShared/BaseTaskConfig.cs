@@ -38,15 +38,26 @@ namespace TasksShared
                 string jsonStr = r.ReadToEnd();
                 dynamic config = JsonConvert.DeserializeObject(jsonStr);
 
-                NHPName = config["NHP Name"];
-                savedFolder = (string)config["saved folder"];
-                audioFile_Correct = (string)config["audioFile_Correct"];
-                audioFile_Error = (string)config["audioFile_Error"];
+
+                JsonString2BaseMainConfig(config);
 
                 // Times Sections
                 var configTime = config["Times"];
                 baseTimeConfig.JsonString2BaseTimeConfig(configTime);
+
+
+                // Color
+                var configColor = config["Colors"];
+                baseColorConfig.JsonString2BaseColorConfig(configColor);
             }
+        }
+
+        public void JsonString2BaseMainConfig(JObject config)
+        {
+            NHPName = (string)config["NHP Name"];
+            savedFolder = (string)config["saved folder"];
+            audioFile_Correct = (string)config["audioFile_Correct"];
+            audioFile_Error = (string)config["audioFile_Error"];
         }
     }
 
@@ -84,7 +95,7 @@ namespace TasksShared
         [JsonProperty(PropertyName = "Trial Background")]
         public string BKTrialColorStr;
 
-        public void JsonString2BaseTimeConfig(JObject configColors)
+        public void JsonString2BaseColorConfig(JObject configColors)
         {
             BKWaitTrialColorStr = (string)configColors["Wait Trial Start Background"];
             BKTrialColorStr = (string)configColors["Trial Background"];

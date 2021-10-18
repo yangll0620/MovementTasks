@@ -21,30 +21,64 @@ namespace TasksShared
         [JsonProperty(PropertyName = "Times")]
         private GoNogoTimeConfig goNogoTimeConfig = new GoNogoTimeConfig();
 
+        [JsonProperty(PropertyName = "Target")]
+        private GoNogoTargetNumPosConfig goNogoTargetNumPosConfig = new GoNogoTargetNumPosConfig();
+
+
+        [JsonProperty(PropertyName = "Colors")]
+        private GoNogoColorConfig goNogoColorConfig = new GoNogoColorConfig();
+
 
 
         public void LoadJsonFile2GoNogoConfig(string configFile)
         {
-            LoadJsonFile2TouchConfig(configFile);
 
             using (StreamReader r = new StreamReader(configFile))
             {
                 string jsonStr = r.ReadToEnd();
                 dynamic config = JsonConvert.DeserializeObject(jsonStr);
 
+                JsonString2GoNogoMainConfig(config);
 
-                totalTrialNumPerPosSess = config["Total Trial Num Per Position Per Session"];
-                nogoTrialNumPerPosSess = config["noGo Trial Num Per Position Per Session"];
 
                 // Times Setup
                 var configTime = config["Times"];
                 goNogoTimeConfig.JsonObject2GoNogoTimeConfig(configTime);
+
+                // Target Num & Pos Setup
+                var configTargetNumPos = config["Target"];
+                goNogoTargetNumPosConfig.JsonObject2GoNogoTargetConfig(configTargetNumPos);
+
+                // Color
+                var configColor = config["Colors"];
+                goNogoColorConfig.JsonString2GoNogoColorConfig(configColor);
             }
+        }
+
+
+        public void JsonString2GoNogoMainConfig(JObject config)
+        {
+            JsonString2TouchMainConfig(config);
+
+            totalTrialNumPerPosSess = (int)config["Total Trial Num Per Position Per Session"];
+            nogoTrialNumPerPosSess = (int)config["noGo Trial Num Per Position Per Session"];
         }
 
         public GoNogoTimeConfig Get_GoNogoTimeConfig()
         {
             return goNogoTimeConfig;
+        }
+
+
+        public GoNogoTargetNumPosConfig Get_GoNogoTargetNumPosConfig()
+        {
+            return goNogoTargetNumPosConfig;
+        }
+
+
+        public GoNogoColorConfig Get_GoNogoColorConfig()
+        {
+            return goNogoColorConfig;
         }
     }
 
@@ -65,5 +99,33 @@ namespace TasksShared
             tRange_CueTimeS = new float[] { float.Parse((string)configTime["Cue Show Time Range"][0]), float.Parse((string)configTime["Cue Show Time Range"][1]) };
             tRange_NogoShowTimeS = new float[] { float.Parse((string)configTime["Nogo Show Time Range"][0]), float.Parse((string)configTime["Nogo Show Time Range"][1]) };
         }
+    }
+
+    public class GoNogoTargetNumPosConfig : TouchTargetNumPosConfig
+    {
+        public void JsonObject2GoNogoTargetConfig(JObject configTargetNumPos)
+        {
+            JsonObject2TouchGoTargetConfig(configTargetNumPos);
+        }
+    }
+
+
+    public class GoNogoColorConfig: TouchColorConfig
+    {
+
+        [JsonProperty(PropertyName = "noGo Fill Color")]
+        public string nogoFillColorStr;
+
+        [JsonProperty(PropertyName = "Cue Crossing Color")]
+        public string cueCrossingColorStr;
+
+        public void JsonString2GoNogoColorConfig(JObject configColors)
+        {
+            JsonString2TouchColorConfig(configColors);
+
+            nogoFillColorStr = (string)configColors["noGo Fill Color"];
+            cueCrossingColorStr = (string)configColors["Cue Crossing Color"];
+        }
+
     }
 }

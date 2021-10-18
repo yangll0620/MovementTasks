@@ -72,12 +72,19 @@
       <DependentUpon>GoNogoTaskUI.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="GoNogoTask_SetupTargetWin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="GoNogoTask_SetupTimeWin.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GoNogoTask_SetupTargetWin.xaml.cs">
+      <DependentUpon>GoNogoTask_SetupTargetWin.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GoNogoTask_SetupTimeWin.xaml.cs">
       <DependentUpon>GoNogoTask_SetupTimeWin.xaml</DependentUpon>
     </Compile>

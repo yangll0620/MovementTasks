@@ -16,12 +16,15 @@ namespace TasksShared
         private TouchTimeConfig touchTimeConfig = new TouchTimeConfig();
 
         [JsonProperty(PropertyName = "Target")]
-        public TargetNumPosConfig targetNumPosConfig = new TargetNumPosConfig();
+        private TouchTargetNumPosConfig touchTargetNumPosConfig = new TouchTargetNumPosConfig();
+
+
+        [JsonProperty(PropertyName = "Colors")]
+        private TouchColorConfig touchColorConfig = new TouchColorConfig();
 
 
         public void LoadJsonFile2TouchConfig(string configFile)
         {
-            LoadJsonFile2BaseConfig(configFile);
 
             using (StreamReader r = new StreamReader(configFile))
             {
@@ -29,15 +32,28 @@ namespace TasksShared
                 dynamic config = JsonConvert.DeserializeObject(jsonStr);
 
 
+                JsonString2TouchMainConfig(config);
+
                 // Times Setup
                 var configTime = config["Times"];
                 touchTimeConfig.JsonObject2TouchTimeConfig(configTime);
 
                 // Target Setup
                 var configTarget = config["Target"];
-                targetNumPosConfig.JsonObject2TouchGoTargetConfig(configTarget);
+                touchTargetNumPosConfig.JsonObject2TouchGoTargetConfig(configTarget);
+
+
+                // Color
+                var configColor = config["Colors"];
+                touchColorConfig.JsonString2TouchColorConfig(configColor);
             }
         }
+
+        public void JsonString2TouchMainConfig(JObject config)
+        {
+            JsonString2BaseMainConfig(config);
+        }
+
     }
 
     public class TouchTimeConfig : BaseTimeConfig
@@ -59,7 +75,7 @@ namespace TasksShared
         }
     }
 
-    public class TargetNumPosConfig
+    public class TouchTargetNumPosConfig
     {
         [JsonProperty(PropertyName = "Target Diameter (Inch)")]
         public float targetDiaInch;
@@ -72,6 +88,7 @@ namespace TasksShared
 
         public void JsonObject2TouchGoTargetConfig(JObject configTarget)
         {
+
             targetDiaInch = float.Parse((string)configTarget["Target Diameter (Inch)"]);
             targetNoOfPositions = int.Parse((string)configTarget["Target No of Positions"]);
             dynamic tmp = configTarget["Optional Positions"];
@@ -81,6 +98,39 @@ namespace TasksShared
                 int b = int.Parse((string)xyPos[1]);
                 optPostions_OCenter_List.Add(new int[] { a, b });
             }
+        }
+    }
+
+
+    public class TouchColorConfig : BaseColorConfig
+    {
+        [JsonProperty(PropertyName = "Go Fill Color")]
+        public string goFillColorStr;
+
+
+        [JsonProperty(PropertyName = "Correct Fill")]
+        public string CorrFillColorStr;
+
+
+        [JsonProperty(PropertyName = "Correct Outline")]
+        public string CorrOutlineColorStr;
+
+        [JsonProperty(PropertyName = "Error Fill")]
+        public string ErrorFillColorStr;
+
+        [JsonProperty(PropertyName = "Error Outline")]
+        public string ErrorOutlineColorStr;
+
+
+        public void JsonString2TouchColorConfig(JObject configColors)
+        {
+            JsonString2BaseColorConfig(configColors);
+
+            goFillColorStr = (string)configColors["Go Fill Color"];
+            CorrFillColorStr = (string)configColors["Correct Fill"];
+            CorrOutlineColorStr = (string)configColors["Correct Outline"];
+            ErrorFillColorStr = (string)configColors["Error Fill"];
+            ErrorOutlineColorStr = (string)configColors["Error Outline"];
         }
     }
 }

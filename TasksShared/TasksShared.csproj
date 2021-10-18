@@ -61,6 +61,8 @@
     </ApplicationDefinition>
     <Compile Include="BaseTaskConfig.cs" />
     <Compile Include="GoNogoTaskConfig.cs" />
+    <Compile Include="ScreenDetect.cs" />
+    <Compile Include="ShapeManipulate.cs" />
     <Compile Include="TouchTaskConfig.cs" />
     <Compile Include="Utility.cs" />
     <Page Include="MainWindow.xaml">

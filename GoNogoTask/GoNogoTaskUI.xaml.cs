@@ -19,6 +19,8 @@ namespace GoNogoTask
 
         public GoNogoTaskConfig goNogoTaskConfig;
 
+        private bool BtnStartState, BtnStopState;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -29,7 +31,7 @@ namespace GoNogoTask
             taskName = "GoNogoTask";
 
             // Task UI
-            swf.Screen taskUIScreen = Utility.TaskUIScreen();
+            swf.Screen taskUIScreen = ScreenDetect.TaskUIScreen();
             sd.Rectangle Rect_showTaskUIScreen = taskUIScreen.Bounds;
             this.Top = Rect_showTaskUIScreen.Top;
             this.Left = Rect_showTaskUIScreen.Left;
@@ -96,7 +98,7 @@ namespace GoNogoTask
         {
             GoNogoTask_SetupTimeWin Win_SetupTime = new GoNogoTask_SetupTimeWin(this);
  
-            swf.Screen showScreen = Utility.TaskUIScreen();
+            swf.Screen showScreen = ScreenDetect.TaskUIScreen();
             sd.Rectangle Rect_showScreen = showScreen.Bounds;
             Win_SetupTime.Top = Rect_showScreen.Top;
             Win_SetupTime.Left = Rect_showScreen.Left;
@@ -109,7 +111,17 @@ namespace GoNogoTask
 
         private void MenuItem_SetupTarget(object sender, RoutedEventArgs e)
         {
+            GoNogoTask_SetupTargetWin Win_SetupTarget = new GoNogoTask_SetupTargetWin(this);
+ 
+            swf.Screen showScreen = ScreenDetect.TaskUIScreen();
+            sd.Rectangle Rect_showScreen = showScreen.Bounds;
+            Win_SetupTarget.Top = Rect_showScreen.Top;
+            Win_SetupTarget.Left = Rect_showScreen.Left;
 
+            // Set Owner
+            Win_SetupTarget.Owner = this;
+
+            Win_SetupTarget.Show();
         }
 
         private void MenuItem_SetupSaveFolderAudio(object sender, RoutedEventArgs e)
@@ -150,6 +162,21 @@ namespace GoNogoTask
         private void MenuItem_SaveConf_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+
+        public void DisableBtnStartStop()
+        {
+            BtnStartState = btn_start.IsEnabled;
+            BtnStopState = btn_stop.IsEnabled;
+            btn_start.IsEnabled = false;
+            btn_stop.IsEnabled = false;
+        }
+
+        public void ResumeBtnStartStop()
+        {
+            btn_start.IsEnabled = BtnStartState;
+            btn_stop.IsEnabled = BtnStopState;
         }
     }
 }

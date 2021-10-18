@@ -21,7 +21,7 @@ namespace GoNogoTask
     public partial class GoNogoTask_SetupTimeWin : Window
     {
         private MainWindow parentMainUI;
-        private bool BtnStartState, BtnStopState;
+        
 
         public GoNogoTask_SetupTimeWin(MainWindow parent)
         {
@@ -32,39 +32,27 @@ namespace GoNogoTask
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            DisableBtnStartStop();
+            parentMainUI.DisableBtnStartStop();
 
             LoadInitTimeData();
         }
 
-        private void DisableBtnStartStop()
-        {
-            BtnStartState = parentMainUI.btn_start.IsEnabled;
-            BtnStopState = parentMainUI.btn_stop.IsEnabled;
-            parentMainUI.btn_start.IsEnabled = false;
-            parentMainUI.btn_stop.IsEnabled = false;
-        }
-        private void ResumeBtnStartStop()
-        {
-            parentMainUI.btn_start.IsEnabled = BtnStartState;
-            parentMainUI.btn_stop.IsEnabled = BtnStopState;
-        }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            ResumeBtnStartStop();
+            parentMainUI.ResumeBtnStartStop();
         }
 
         private void Btn_OK_Click(object sender, RoutedEventArgs e)
         {
             SaveTimeData();
-            ResumeBtnStartStop();
+            parentMainUI.ResumeBtnStartStop();
             this.Close();
         }
 
         private void Btn_Cancel_Click(object sender, RoutedEventArgs e)
         {
-            ResumeBtnStartStop();
+            parentMainUI.ResumeBtnStartStop();
             this.Close();
         }
 
