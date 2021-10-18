@@ -59,7 +59,7 @@ namespace GoNogoTask
         private void LoadInitTimeData()
         {// Load Initial Time Data from parentMainUI
 
-            GoNogoTimeConfig goNogoTimeConfig = parentMainUI.goNogoTaskConfig.Get_GoNogoTimeConfig();
+            GoNogoTimeConfig goNogoTimeConfig = parentMainUI.goNogoTaskConfig.goNogoTimeConfig;
 
 
             textBox_tReady_min.Text = goNogoTimeConfig.tRange_ReadyTimeS[0].ToString();
@@ -84,7 +84,7 @@ namespace GoNogoTask
         {/* ---- Save all the Set Time Information back to MainWindow Variables ----- */
 
 
-            GoNogoTimeConfig goNogoTimeConfig = parentMainUI.goNogoTaskConfig.Get_GoNogoTimeConfig();
+            GoNogoTimeConfig goNogoTimeConfig = parentMainUI.goNogoTaskConfig.goNogoTimeConfig;
 
             goNogoTimeConfig.tRange_ReadyTimeS[0] = float.Parse(textBox_tReady_min.Text);
             goNogoTimeConfig.tRange_ReadyTimeS[1] = float.Parse(textBox_tReady_max.Text);

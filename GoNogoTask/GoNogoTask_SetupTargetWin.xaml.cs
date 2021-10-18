@@ -45,7 +45,7 @@ namespace GoNogoTask
         private void LoadInitTargetData()
         {
 
-            GoNogoTargetNumPosConfig goNogoTargetNumPosConfig = parentMainUI.goNogoTaskConfig.Get_GoNogoTargetNumPosConfig();
+            GoNogoTargetNumPosConfig goNogoTargetNumPosConfig = parentMainUI.goNogoTaskConfig.goNogoTargetNumPosConfig;
 
             // Fill in target DiaInch and No of Positions
             textBox_targetDiaInch.Text = goNogoTargetNumPosConfig.targetDiaInch.ToString();
@@ -131,7 +131,7 @@ namespace GoNogoTask
                 try
                 {
                     string[] strxy = editBox_Pos.Text.Split(',');
-                    parentMainUI.goNogoTaskConfig.Get_GoNogoTargetNumPosConfig().optPostions_OCenter_List[indexSelected] = new int[] { int.Parse(strxy[0]), int.Parse(strxy[1]) };
+                    parentMainUI.goNogoTaskConfig.goNogoTargetNumPosConfig.optPostions_OCenter_List[indexSelected] = new int[] { int.Parse(strxy[0]), int.Parse(strxy[1]) };
 
                     optPosString_List[indexSelected] = editBox_Pos.Text;
                     listBox_Positions.ItemsSource = null;
@@ -154,7 +154,7 @@ namespace GoNogoTask
 
         private void SaveTargetData()
         {/* ---- Save all the Set Target Information back to MainWindow Variables ----- */
-            GoNogoTargetNumPosConfig targetConfig = parentMainUI.goNogoTaskConfig.Get_GoNogoTargetNumPosConfig();
+            GoNogoTargetNumPosConfig targetConfig = parentMainUI.goNogoTaskConfig.goNogoTargetNumPosConfig;
             targetConfig.targetDiaInch = float.Parse(textBox_targetDiaInch.Text);
             targetConfig.targetNoOfPositions = int.Parse(textBox_targetNoOfPositions.Text);
 
@@ -207,7 +207,7 @@ namespace GoNogoTask
 
         private void Btn_CheckPositions_Click(object sender, RoutedEventArgs e)
         {
-            GoNogoColorConfig colorConfig = parentMainUI.goNogoTaskConfig.Get_GoNogoColorConfig();
+            GoNogoColorConfig colorConfig = parentMainUI.goNogoTaskConfig.goNogoColorConfig;
             Color BKColor = (Color)(typeof(Colors).GetProperty(colorConfig.BKTrialColorStr) as PropertyInfo).GetValue(null, null);
             Color targetColor = (Color)(typeof(Colors).GetProperty(colorConfig.goFillColorStr) as PropertyInfo).GetValue(null, null);
 

@@ -91,7 +91,17 @@ namespace GoNogoTask
 
         private void MenuItem_SetupColors(object sender, RoutedEventArgs e)
         {
+            GoNogoTask_SetupColorsWin Win_SetupColors = new GoNogoTask_SetupColorsWin(this);
 
+            swf.Screen showScreen = ScreenDetect.TaskUIScreen();
+            sd.Rectangle Rect_showScreen = showScreen.Bounds;
+            Win_SetupColors.Top = Rect_showScreen.Top;
+            Win_SetupColors.Left = Rect_showScreen.Left;
+
+            // Set Owner
+            Win_SetupColors.Owner = this;
+
+            Win_SetupColors.Show();
         }
 
         private void MenuItem_SetupTime(object sender, RoutedEventArgs e)

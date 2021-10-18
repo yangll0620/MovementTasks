@@ -19,14 +19,14 @@ namespace TasksShared
 
 
         [JsonProperty(PropertyName = "Times")]
-        private GoNogoTimeConfig goNogoTimeConfig = new GoNogoTimeConfig();
+        public GoNogoTimeConfig goNogoTimeConfig = new GoNogoTimeConfig();
 
         [JsonProperty(PropertyName = "Target")]
-        private GoNogoTargetNumPosConfig goNogoTargetNumPosConfig = new GoNogoTargetNumPosConfig();
+        public GoNogoTargetNumPosConfig goNogoTargetNumPosConfig = new GoNogoTargetNumPosConfig();
 
 
         [JsonProperty(PropertyName = "Colors")]
-        private GoNogoColorConfig goNogoColorConfig = new GoNogoColorConfig();
+        public GoNogoColorConfig goNogoColorConfig = new GoNogoColorConfig();
 
 
 
@@ -62,23 +62,6 @@ namespace TasksShared
 
             totalTrialNumPerPosSess = (int)config["Total Trial Num Per Position Per Session"];
             nogoTrialNumPerPosSess = (int)config["noGo Trial Num Per Position Per Session"];
-        }
-
-        public GoNogoTimeConfig Get_GoNogoTimeConfig()
-        {
-            return goNogoTimeConfig;
-        }
-
-
-        public GoNogoTargetNumPosConfig Get_GoNogoTargetNumPosConfig()
-        {
-            return goNogoTargetNumPosConfig;
-        }
-
-
-        public GoNogoColorConfig Get_GoNogoColorConfig()
-        {
-            return goNogoColorConfig;
         }
     }
 
