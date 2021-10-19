@@ -66,7 +66,7 @@
                                 <TextBox x:Name="textBox_NHPName" HorizontalAlignment="Left" VerticalAlignment="Top"
                                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                                  Width="75" Height="25" Margin="80,10,10,0"
-                                 TextWrapping="Wrap"  FontWeight="Normal" />
+                                 TextWrapping="Wrap"  FontWeight="Normal" TextChanged="TextBox_NHPName_TextChanged"/>
                             </Grid>
 
                             <Grid Grid.Column="1">
@@ -99,7 +99,7 @@
                                 <TextBox x:Name="textBox_totalTrialNumPerPosSess" HorizontalAlignment="Left" VerticalAlignment="Top"
                                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                                  Width="75" Height="25" Margin="200,10,10,0"
-                                 TextWrapping="Wrap"  FontWeight="Normal" />
+                                 TextWrapping="Wrap"  FontWeight="Normal" TextChanged="TextBox_totalTrialNumPerPosSess_TextChanged"/>
                             </Grid>
 
                             <Grid Grid.Column ="1">
@@ -110,7 +110,7 @@
                                 <TextBox x:Name="textBox_nogoTrialNumPerPosSess" HorizontalAlignment="Left" VerticalAlignment="Top"
                                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                                  Width="75" Height="25" Margin="200,10,10,0"
-                                 TextWrapping="Wrap"  FontWeight="Normal" />
+                                 TextWrapping="Wrap"  FontWeight="Normal" TextChanged="TextBox_nogoTrialNumPerPosSess_TextChanged"/>
                             </Grid>
                         </Grid>
 

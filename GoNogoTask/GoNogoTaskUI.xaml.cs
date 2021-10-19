@@ -312,6 +312,21 @@ namespace GoNogoTask
             btn_stop.IsEnabled = false;
         }
 
+        private void TextBox_totalTrialNumPerPosSess_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            goNogoTaskConfig.totalTrialNumPerPosSess = int.Parse(textBox_totalTrialNumPerPosSess.Text);
+        }
+
+        private void TextBox_nogoTrialNumPerPosSess_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            goNogoTaskConfig.nogoTrialNumPerPosSess = int.Parse(textBox_nogoTrialNumPerPosSess.Text);
+        }
+
+        private void TextBox_NHPName_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            goNogoTaskConfig.NHPName = textBox_NHPName.Text;
+        }
+
         public void ResumeBtnStartStop()
         {
             btn_start.IsEnabled = BtnStartState;
