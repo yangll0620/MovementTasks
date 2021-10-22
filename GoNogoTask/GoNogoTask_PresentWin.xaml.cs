@@ -173,7 +173,12 @@ namespace GoNogoTask
         // Target Information (posIndex, goNogoType) List for Each Trial Per Session
         private List<int[]> trialTargetInfo_PerSess_List;
 
+        // list storing the position/Timepoint of the touch points when touched down
+        List<double[]> downPoints_Pos = new List<double[]>();
 
+        // list storing the position, touched and left Timepoints of the touch points
+        // one element: [point_id, touched_timepoint, touched_x, touched_y, left_timepoint, left_x, left_y]
+        List<double[]> touchPoints_PosTime = new List<double[]>();
 
 
         public GoNogoTask_PresentWin(MainWindow parentWin)
@@ -985,7 +990,7 @@ namespace GoNogoTask
 
         }
 
-
+        ScreenTouchState screenTouchstate;
         private async Task Interface_Go(int[] targetPos_OTopLeft)
         {/* task for Go Interface: Show the Go Interface while Listen to the state of the startpad.
             * 1. If Reaction time < Max Reaction Time or Reach Time < Max Reach Time, end up with long reaction or reach time ERROR Interface
@@ -1053,6 +1058,105 @@ namespace GoNogoTask
                 throw new TaskCanceledException("Not Reaction Within the Max Reaction Time.");
             }
 
+        }
+
+
+
+        private Task Wait_Reaction()
+        {/* Wait for Reaction within tMax_ReactionTime */
+
+            // start a task and return it
+            return Task.Run(() =>
+            {
+                Stopwatch waitWatch = new Stopwatch();
+                waitWatch.Start();
+                while (PresentTrial && pressedStartpad == PressedStartpad.Yes)
+                {
+                    if (waitWatch.ElapsedMilliseconds >= tMax_ReactionTimeMS)
+                    {/* No release Startpad within tMax_ReactionTime */
+                        waitWatch.Stop();
+
+                        serialPort_IO8.WriteLine(TDTCmd_GoReactionTooLong);
+                        trialExeResult = TrialExeResult.goReactionTimeToolong;
+
+
+                        throw new TaskCanceledException("No Reaction within the Max Reaction Time");
+                    }
+                }
+                waitWatch.Stop();
+            });
+        }
+
+        private Task Wait_Reach()
+        {/* Wait for Reach within tMax_ReachTime*/
+
+            return Task.Run(() =>
+            {
+                Stopwatch waitWatch = new Stopwatch();
+                waitWatch.Start();
+                while (PresentTrial && screenTouchstate == ScreenTouchState.Idle)
+                {
+                    if (waitWatch.ElapsedMilliseconds >= tMax_ReachTimeMS)
+                    {/*No Screen Touched within tMax_ReachTime*/
+                        waitWatch.Stop();
+
+                        serialPort_IO8.WriteLine(TDTCmd_GoReachTooLong);
+                        trialExeResult = TrialExeResult.goReachTimeToolong;
+
+
+                        throw new TaskCanceledException("No Reach within the Max Reach Time");
+                    }
+                }
+                downPoints_Pos.Clear();
+                touchPoints_PosTime.Clear();
+                waitWatch.Restart();
+                while (waitWatch.ElapsedMilliseconds <= tMax_1Touch) ;
+                waitWatch.Stop();
+                calc_GoTargetTouchState();
+            });
+        }
+
+        GoTargetTouchState gotargetTouchstate;
+        // Center Point and Radius of CircleGo (in Pixal)
+        Point circleGo_centerPoint_Pixal;
+        double circleGo_Radius_Pixal;
+
+        private void calc_GoTargetTouchState()
+        {/* Calculate GoTargetTouchState  
+            1. based on the Touch Down Positions in  List downPoints_Pos and circleGo_centerPoint
+            2. Assign the calculated target touch state to the GoTargetTouchState variable gotargetTouchstate
+            */
+
+            double distance;
+            gotargetTouchstate = GoTargetTouchState.goMissed;
+            while (downPoints_Pos.Count > 0)
+            {
+                // always deal with the point at 0
+                Point touchp = new Point(downPoints_Pos[0][0], downPoints_Pos[0][1]);
+
+                // distance between the touchpoint and the center of the circleGo
+                distance = Point.Subtract(circleGo_centerPoint_Pixal, touchp).Length;
+
+
+                if (distance <= circleGo_Radius_Pixal)
+                {// Hit 
+
+                    serialPort_IO8.WriteLine(TDTCmd_GoTouchedHit);
+                    gotargetTouchstate = GoTargetTouchState.goHit;
+
+                    downPoints_Pos.Clear();
+                    break;
+                }
+
+                // remove the downPoint at 0
+                downPoints_Pos.RemoveAt(0);
+            }
+
+            if (gotargetTouchstate == GoTargetTouchState.goMissed)
+            {
+                serialPort_IO8.WriteLine(TDTCmd_GoTouchedMiss);
+            }
+            downPoints_Pos.Clear();
         }
 
         private void ShuffleTrials_GenRandomTime()
