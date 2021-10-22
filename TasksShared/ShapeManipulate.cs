@@ -30,6 +30,24 @@ namespace TasksShared
         }
 
 
+        public static Ellipse Show_Circle_OTopLeft(Ellipse circle, int[] cPoint_Pos_OTopLeft, SolidColorBrush brush_Fill)
+        {/*
+            Show the circle at cPoint_Pos_OTopLeft (Origin in the topLeft of the Screen)
+
+            Args:
+                circle: to Be Showed Circle
+
+                cPoint_Pos_OTopLeft: the x, y Positions of the Circle center in Pixal (Origin in the topLeft of the Screen)
+
+            */
+
+            circle = Move_Circle_OTopLeft(circle, cPoint_Pos_OTopLeft);
+            circle.Fill = brush_Fill;
+            circle.Visibility = Visibility.Visible;
+
+            return circle; 
+        }
+
         public static Ellipse Move_Circle_OTopLeft(Ellipse circle, int[] cPoint_Pos_OTopLeft)
         {/*
             Move the circle into cPoint_Pos_OTopLeft (Origin in the topLeft of the Screen)
@@ -145,6 +163,13 @@ namespace TasksShared
 
             horiLine.Visibility = Visibility.Visible;
             vertLine.Visibility = Visibility.Visible;
+        }
+
+
+        public void Hidden_Crossing()
+        {
+            horiLine.Visibility = Visibility.Hidden;
+            vertLine.Visibility = Visibility.Hidden;
         }
 
         protected override Geometry DefiningGeometry => throw new System.NotImplementedException();
