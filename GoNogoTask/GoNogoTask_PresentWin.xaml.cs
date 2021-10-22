@@ -89,7 +89,6 @@ namespace GoNogoTask
         string file_saved;
         System.Media.SoundPlayer player_Correct, player_Error;
 
-        private List<int[]> optPostions_OCenter_List;
         private List<int[]> optPostions_OTopLeft_List;
         private int targetPosNum;
         private int totalTrialNumPerPosSess, nogoTrialNumPerPosSess;
@@ -197,21 +196,21 @@ namespace GoNogoTask
 
         private void Generate_IO8EventTDTCmd()
         {
-            TDTCmd_InitState = SerialPortIO8.Convert2_IO8EventCmd_Bit5to8(Code_InitState);
-            TDTCmd_TouchTriggerTrial = SerialPortIO8.Convert2_IO8EventCmd_Bit5to8(Code_TouchTriggerTrial);
-            TDTCmd_ReadyShown = SerialPortIO8.Convert2_IO8EventCmd_Bit5to8(Code_ReadyShown);
-            TDTCmd_ReadyWaitTooShort = SerialPortIO8.Convert2_IO8EventCmd_Bit5to8(Code_ReadyWaitTooShort);
-            TDTCmd_GoTargetShown = SerialPortIO8.Convert2_IO8EventCmd_Bit5to8(Code_GoTargetShown);
-            TDTCmd_GoReactionTooLong = SerialPortIO8.Convert2_IO8EventCmd_Bit5to8(Code_GoReactionTooLong);
-            TDTCmd_GoReachTooLong = SerialPortIO8.Convert2_IO8EventCmd_Bit5to8(Code_GoReachTooLong);
-            TDTCmd_GoTouched = SerialPortIO8.Convert2_IO8EventCmd_Bit5to8(Code_GoTouched);
-            TDTCmd_GoTouchedHit = SerialPortIO8.Convert2_IO8EventCmd_Bit5to8(Code_GoTouchedHit);
-            TDTCmd_GoTouchedMiss = SerialPortIO8.Convert2_IO8EventCmd_Bit5to8(Code_GoTouchedMiss);
-            TDTCmd_CueShown = SerialPortIO8.Convert2_IO8EventCmd_Bit5to8(Code_CueShown);
-            TDTCmd_CueWaitTooShort = SerialPortIO8.Convert2_IO8EventCmd_Bit5to8(Code_CueWaitTooShort);
-            TDTCmd_noGoTargetShown = SerialPortIO8.Convert2_IO8EventCmd_Bit5to8(Code_noGoTargetShown);
-            TDTCmd_noGoEnoughTCorrectFeedback = SerialPortIO8.Convert2_IO8EventCmd_Bit5to8(Code_noGoEnoughTCorrectFeedback);
-            TDTCmd_noGoLeftEarlyErrorFeedback = SerialPortIO8.Convert2_IO8EventCmd_Bit5to8(Code_noGoLeftEarlyErrorFeedback);
+            TDTCmd_InitState = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_InitState);
+            TDTCmd_TouchTriggerTrial = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_TouchTriggerTrial);
+            TDTCmd_ReadyShown = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_ReadyShown);
+            TDTCmd_ReadyWaitTooShort = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_ReadyWaitTooShort);
+            TDTCmd_GoTargetShown = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_GoTargetShown);
+            TDTCmd_GoReactionTooLong = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_GoReactionTooLong);
+            TDTCmd_GoReachTooLong = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_GoReachTooLong);
+            TDTCmd_GoTouched = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_GoTouched);
+            TDTCmd_GoTouchedHit = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_GoTouchedHit);
+            TDTCmd_GoTouchedMiss = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_GoTouchedMiss);
+            TDTCmd_CueShown = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_CueShown);
+            TDTCmd_CueWaitTooShort = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_CueWaitTooShort);
+            TDTCmd_noGoTargetShown = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_noGoTargetShown);
+            TDTCmd_noGoEnoughTCorrectFeedback = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_noGoEnoughTCorrectFeedback);
+            TDTCmd_noGoLeftEarlyErrorFeedback = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_noGoLeftEarlyErrorFeedback);
         }
 
         private void PrepBef_Present()
@@ -352,9 +351,11 @@ namespace GoNogoTask
                 BaudRate = 115200
             };
 
+            // trialTargetInfo_PerSess_List Storing trial Target Info [posIndex, GoNogoIndex]
             trialTargetInfo_PerSess_List = Create_TrialTargetInfo_List(totalTrialNumPerPosSess, nogoTrialNumPerPosSess, targetPosNum);
 
-            
+
+            // optPostions_OTopLeft_List: optional positions
             optPostions_OTopLeft_List = new List<int[]>();
             for (int i = 0; i < targetPosNum; i++)
             {
@@ -362,7 +363,39 @@ namespace GoNogoTask
             }
         }
 
-        
+
+
+        private List<int[]> Create_TrialTargetInfo_List(int trialNumPerPos, int nogoTrialNumPerPos, int posNum)
+        {/*
+            Parameters:
+                trialNumPerPos: total Trial Number Per Position(trialNum = goTrialNum + nogoTrialNum)
+                nogoTrialNumPerPos: nogo Trial Number
+                posNum: total Position Number
+
+            Return:
+                trialTargetInfo_List: Each Trial Target Information List ([posIndex, gonogoIndex]), gonogoIndex = 0(nogo), 1(go)
+                e.g. trialNumPerPos = 5; nogoTrialNumPerPos = 2; posNum = 3;
+                [   [0, 0], [0, 0], [0, 1], [0, 1], [0, 1],
+                    [1, 0], [1, 0], [1, 1], [1, 1], [1, 1],
+                    [2, 0], [2, 0], [2, 1], [2, 1], [2, 1]
+                ], 
+            */
+
+            List<int[]> trialTargetInfo_List = new List<int[]>();
+
+            for (int posi = 0; posi < posNum; posi++)
+            {
+                for (int goNogoi = 0; goNogoi < trialNumPerPos; goNogoi++)
+                {
+                    int goNogoIndex = (int)((goNogoi < nogoTrialNumPerPos) ? TargetType.Nogo : TargetType.Go);
+                    trialTargetInfo_List.Add(new int[] { posi, goNogoIndex });
+                }
+
+            }
+
+            return trialTargetInfo_List;
+        }
+
         private void GetSetupParameters()
         {/* get the setup from the parent interface */
 
@@ -378,7 +411,6 @@ namespace GoNogoTask
             GoNogoTargetNumPosConfig goNogoTargetNumPosConfig = goNogoTaskConfig.goNogoTargetNumPosConfig;
             targetDiameterPixal = Utility.Inch2Pixal(goNogoTargetNumPosConfig.targetDiaInch);
             targetPosNum = goNogoTargetNumPosConfig.optPostions_OCenter_List.Count;
-
             swf.Screen touchScreen = ScreenDetect.TaskPresentTouchScreen();
             int width = touchScreen.Bounds.Width, height = touchScreen.Bounds.Height;
             for (int i = 0; i < targetPosNum; i++)
@@ -473,7 +505,7 @@ namespace GoNogoTask
             try
             {
                 float t_Cue, t_Ready, t_noGoShow;
-                int[] pos_Taget_OCenter;
+                int[] pos_Taget_OTopLeft;
                 int totalTrialNumPerSess = totalTrialNumPerPosSess * targetPosNum;
 
                 // Present Each Trial
@@ -503,7 +535,7 @@ namespace GoNogoTask
                         // Extract trial parameters
                         int[] targetInfo = trialTargetInfo_PerSess_List[sessTriali];
                         currTrialTargetPosInd = targetInfo[0];
-                        pos_Taget_OCenter = optPostions_OCenter_List[currTrialTargetPosInd];
+                        pos_Taget_OTopLeft = optPostions_OTopLeft_List[currTrialTargetPosInd];
                         targetType = (TargetType)targetInfo[1];
                         t_Cue = t_Cue_List[sessTriali];
                         t_Ready = t_Ready_List[sessTriali];
@@ -538,7 +570,7 @@ namespace GoNogoTask
                             }
 
                             // Cue Interface
-                            await Interface_Cue(t_Cue, pos_Taget_OCenter);
+                            await Interface_Cue(t_Cue, pos_Taget_OTopLeft);
 
                             if (PresentTrial == false)
                             {
@@ -549,7 +581,7 @@ namespace GoNogoTask
                             sessTriali++;
                             if (targetType == TargetType.Go)
                             {
-                                await Interface_Go(pos_Taget_OCenter);
+                                await Interface_Go(pos_Taget_OTopLeft);
                                 if (PresentTrial == false)
                                 {
                                     break;
@@ -557,7 +589,7 @@ namespace GoNogoTask
                             }
                             else
                             {
-                                await Interface_noGo(t_noGoShow, pos_Taget_OCenter);
+                                await Interface_noGo(t_noGoShow, pos_Taget_OTopLeft);
                                 if (PresentTrial == false)
                                 {
                                     break;
@@ -904,13 +936,13 @@ namespace GoNogoTask
         }
 
 
-        public async Task Interface_Cue(float t_Cue, int[] onecrossingPos_OCenter)
+        public async Task Interface_Cue(float t_Cue, int[] crossingPos_OTopLeft)
         {/* task for Cue Interface 
             Show the Cue Interface while Listen to the state of the startpad. 
             
             Args:
                 t_Cue: Cue interface showes duration(s)
-                onecrossingPos: the center X, Y position of the one crossing, Origin at Screen Center
+                crossingPos_OTopLeft: the center X, Y position of the one crossing, Origin at Screen TopLeft
 
             * Output:
             *   startPadHoldstate_Cue = 
@@ -924,7 +956,7 @@ namespace GoNogoTask
                 Remove_All();
 
                 // Show the crossing at onecrossingPos_OCenter 
-                crossing.Show_Crossing_OTopLeft(onecrossingPos_OCenter);
+                crossing.Show_Crossing_OTopLeft(crossingPos_OTopLeft);
                 //Show_OneCrossing(onecrossingPos_OCenter);
 
                 serialPort_IO8.WriteLine(TDTCmd_CueShown);
@@ -949,6 +981,76 @@ namespace GoNogoTask
 
                 Task task = null;
                 throw new TaskCanceledException(task);
+            }
+
+        }
+
+
+        private async Task Interface_Go(int[] targetPos_OTopLeft)
+        {/* task for Go Interface: Show the Go Interface while Listen to the state of the startpad.
+            * 1. If Reaction time < Max Reaction Time or Reach Time < Max Reach Time, end up with long reaction or reach time ERROR Interface
+            * 2. Within proper reaction time && reach time, detect the touch point and end up with hit, near and miss.
+            
+            * Args:
+            *    targetPos_OTopLeft: the Center Position of the Target, Origin in TopLeft
+
+            * Output:
+            *   startPadHoldstate_Cue = 
+            *       StartPadHoldState.HoldEnough (if startpad is touched lasting t_Cue)
+            *       StartPadHoldState.HoldTooShort (if startpad is released before t_Cue) 
+            */
+
+            try
+            {
+                // Remove the Crossing and Show the Go Circle
+                crossing.Hidden_Crossing();
+                ShapeManipulate.Show_Circle_OTopLeft(circleGo, targetPos_OTopLeft, brush_goCircleFill);
+
+                // Increased Total Go Trial Number of currTrialTargetPosInd
+                TargetExeFeedback_List[currTrialTargetPosInd][0]++;
+
+                // go target Onset Time Point
+                timePoint_Interface_TargetOnset = globalWatch.ElapsedMilliseconds;
+                serialPort_IO8.WriteLine(TDTCmd_GoTargetShown);
+
+                // Wait for Reaction within tMax_ReactionTime
+                pressedStartpad = PressedStartpad.Yes;
+                await Wait_Reaction();
+
+                // Wait for Touch within tMax_ReachTime and Calcuate the gotargetTouchstate
+                screenTouchstate = ScreenTouchState.Idle;
+                await Wait_Reach();
+
+
+                /*---- Go Target Touch States ----*/
+                if (gotargetTouchstate == GoTargetTouchState.goHit)
+                {/*Hit */
+
+                    Feedback_GoCorrect_Hit();
+
+                    // Increased Success Go Trial Number of currTrialTargetPosInd
+                    TargetExeFeedback_List[currTrialTargetPosInd][1]++;
+
+                    // trial execute result: goHit 
+                    trialExeResult = TrialExeResult.goHit;
+
+                }
+                else if (gotargetTouchstate == GoTargetTouchState.goMissed)
+                {/* touch missed*/
+
+                    Feedback_GoERROR_Miss();
+
+                    // trial execute result: goMiss 
+                    trialExeResult = TrialExeResult.goMiss;
+                }
+
+                await Task.Delay(t_VisfeedbackShow);
+            }
+            catch (TaskCanceledException)
+            {
+                Interface_GoERROR_LongReactionReach();
+                await Task.Delay(t_VisfeedbackShow);
+                throw new TaskCanceledException("Not Reaction Within the Max Reaction Time.");
             }
 
         }
