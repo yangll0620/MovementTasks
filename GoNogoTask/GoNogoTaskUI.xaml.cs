@@ -6,6 +6,7 @@ using sd = System.Drawing;
 using TasksShared;
 using Newtonsoft.Json;
 using System.Reflection;
+using System.Windows.Media;
 
 namespace GoNogoTask
 {
@@ -16,13 +17,12 @@ namespace GoNogoTask
     {
         private string taskName;
         public string serialPortIO8_name;
+        public string file_saved;
 
 
         public GoNogoTaskConfig goNogoTaskConfig;
 
         private bool BtnStartState, BtnStopState;
-
-        string file_saved;
 
         swf.Screen presentTouchScreen;
 
@@ -44,7 +44,7 @@ namespace GoNogoTask
 
 
             // Check serial Port IO8 Connection
-            //CheckIO8Connection();
+            CheckIO8Connection();
 
 
             // Load Default Config File
@@ -56,8 +56,8 @@ namespace GoNogoTask
             // Get the touch Screen
             presentTouchScreen = ScreenDetect.TaskPresentTouchScreen();
             
-            //Rect_presentTouchScreen = presentTouchScreen.Bounds;
-            /*if (textBox_NHPName.Text != "" && serialPortIO8_name != null)
+
+            if (serialPortIO8_name != null)
             {
                 btn_start.IsEnabled = true;
                 btn_stop.IsEnabled = false;
@@ -66,10 +66,40 @@ namespace GoNogoTask
             {
                 btn_start.IsEnabled = false;
                 btn_stop.IsEnabled = false;
-            }*/
-            btn_start.IsEnabled = true;
+            }
         }
 
+
+        private void CheckIO8Connection()
+        {
+            // locate serial Port Name
+            serialPortIO8_name = SerialPortIO8Manipulate.Locate_serialPortIO8Name();
+            if (String.Equals(serialPortIO8_name, ""))
+            {
+                btn_start.IsEnabled = false;
+                btn_comReconnect.Visibility = Visibility.Visible;
+                btn_comReconnect.IsEnabled = true;
+                textblock_comState.Visibility = Visibility.Visible;
+
+                run_comState.Text = "Can't Find the COM Port for DLP-IO8!";
+                run_comState.Background = new SolidColorBrush(Colors.Orange);
+                run_comState.Foreground = new SolidColorBrush(Colors.Red);
+                run_instruction.Text = "Please connect it correctly and reCheck!";
+                run_instruction.Background = new SolidColorBrush(Colors.Orange);
+                run_instruction.Foreground = new SolidColorBrush(Colors.Red);
+            }
+            else
+            {
+                btn_comReconnect.Visibility = Visibility.Hidden;
+                btn_comReconnect.IsEnabled = false;
+                run_comState.Text = "Found the COM Port for DLP-IO8!";
+                run_comState.Background = new SolidColorBrush(Colors.White);
+                run_comState.Foreground = new SolidColorBrush(Colors.Green);
+                run_instruction.Text = "Can start trials now";
+                run_instruction.Background = new SolidColorBrush(Colors.White);
+                run_instruction.Foreground = new SolidColorBrush(Colors.Green);
+            }
+        }
 
         private void LoadConfigFile(string configFile)
         {/*Load Config File .json 
@@ -195,11 +225,13 @@ namespace GoNogoTask
 
         private void btnLoadConf_Click(object sender, RoutedEventArgs e)
         {
-            Microsoft.Win32.OpenFileDialog openFileDlg = new Microsoft.Win32.OpenFileDialog();
+            Microsoft.Win32.OpenFileDialog openFileDlg = new Microsoft.Win32.OpenFileDialog
+            {
 
-            // Set filter for file extension and default file extension 
-            openFileDlg.DefaultExt = ".json";
-            openFileDlg.Filter = "Json Files|*.json";
+                // Set filter for file extension and default file extension 
+                DefaultExt = ".json",
+                Filter = "Json Files|*.json"
+            };
 
             Nullable<bool> result = openFileDlg.ShowDialog();
 
@@ -247,10 +279,28 @@ namespace GoNogoTask
 
         }
 
+        GoNogoTask_PresentWin goNogoTask_PresentWin;
         private void btnStart_Click(object sender, RoutedEventArgs e)
         {
             // save all the Input parameters
             saveTaskInf2Savedfile();
+
+            DisableBtnStartStop();
+
+
+            // Show the taskpresent Window on the Touch Screen
+            goNogoTask_PresentWin = new GoNogoTask_PresentWin(this)
+            {
+                Top = presentTouchScreen.Bounds.Top,
+                Left = presentTouchScreen.Bounds.Left,
+                Name = taskName + "_Win",
+                Owner = this
+            };
+
+
+            // Start the Task
+            goNogoTask_PresentWin.Show();
+            //goNogoTask_PresentWin.Present_Start();
         }
 
         private void saveTaskInf2Savedfile()

@@ -62,6 +62,7 @@
     <Compile Include="BaseTaskConfig.cs" />
     <Compile Include="GoNogoTaskConfig.cs" />
     <Compile Include="ScreenDetect.cs" />
+    <Compile Include="SerialPortIO8Manipulate.cs" />
     <Compile Include="ShapeManipulate.cs" />
     <Compile Include="TouchTaskConfig.cs" />
     <Compile Include="Utility.cs" />

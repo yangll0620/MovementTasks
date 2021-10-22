@@ -27,6 +27,12 @@
                                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                                  Width="75" Height="25" Margin="80,10,10,0"
                                  TextWrapping="Wrap"  FontWeight="Normal" />
+                <Line Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" 
+                      X1="100" Y1="50" X2="100" Y2="100" Stroke="Red"/>
+
+                <Line Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" 
+                      X1="10" Y1="250" X2="20" Y2="250" Stroke="Red"/>
+                <Ellipse x:Name="cicle" Width="100" Height="100" VerticalAlignment="Top" HorizontalAlignment="Left" Fill="Green"/>
             </Grid>
 
             <Grid Grid.Column="1">

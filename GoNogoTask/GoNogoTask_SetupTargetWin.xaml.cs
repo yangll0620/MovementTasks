@@ -301,7 +301,7 @@ namespace GoNogoTask
                 sd.Rectangle Rect_touchScreen = ScreenDetect.TaskPresentTouchScreen().Bounds;
                 int[] cPoint_Pos_OTopLeft = new int[] { cPoint_Pos_OCenter[0] + Rect_touchScreen.Width / 2, cPoint_Pos_OCenter[1] + Rect_touchScreen.Height / 2 };
 
-                Ellipse circle = ShapeManipulate.Create_Circle((double)targetDiaPixal, new SolidColorBrush(targetColor));
+                Ellipse circle = ShapeManipulate.Create_Circle(targetDiaPixal);
                 ShapeManipulate.Move_Circle_OTopLeft(circle, cPoint_Pos_OTopLeft);
 
                 wholeGrid.Children.Add(circle);
