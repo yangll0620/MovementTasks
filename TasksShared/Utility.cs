@@ -77,5 +77,33 @@ namespace TasksShared
             return defaultPostions_OCenter_List;
 
         }
+
+
+
+        public static List<T> ShuffleListMember<T>(List<T> list)
+        {
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                Random rng = new Random();
+                int k = rng.Next(n + 1);
+                T value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
+            return list;
+        }
+
+
+        public static float TransferToRange(float value, float lower, float upper)
+        {// transform value (0=<value<1) into a valueT (lower=<valueT<upper)
+
+            float rndTime;
+            rndTime = value * (upper - lower) + lower;
+
+            return rndTime;
+        }
+
     }
 }
