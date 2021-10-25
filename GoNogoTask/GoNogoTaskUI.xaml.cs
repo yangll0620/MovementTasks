@@ -300,7 +300,7 @@ namespace GoNogoTask
 
             // Start the Task
             goNogoTask_PresentWin.Show();
-            //goNogoTask_PresentWin.Present_Start();
+            goNogoTask_PresentWin.Present_Start();
         }
 
         private void saveTaskInf2Savedfile()

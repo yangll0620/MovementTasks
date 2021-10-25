@@ -295,6 +295,10 @@ namespace GoNogoTask
             }
 
             // Show All Targets
+            GoNogoColorConfig goNogoColorConfig = parentMainUI.goNogoTaskConfig.goNogoColorConfig;
+            SolidColorBrush brush_goCircleFill = new SolidColorBrush();
+            brush_goCircleFill.Color = (Color)(typeof(Colors).GetProperty(goNogoColorConfig.goFillColorStr) as PropertyInfo).GetValue(null, null); 
+
             foreach (int[] cPoint_Pos_OCenter in postions_OriginCenter_List)
             {
                 // Change the cPoint  into Top Left Coordinate System
@@ -302,7 +306,7 @@ namespace GoNogoTask
                 int[] cPoint_Pos_OTopLeft = new int[] { cPoint_Pos_OCenter[0] + Rect_touchScreen.Width / 2, cPoint_Pos_OCenter[1] + Rect_touchScreen.Height / 2 };
 
                 Ellipse circle = ShapeManipulate.Create_Circle(targetDiaPixal);
-                ShapeManipulate.Move_Circle_OTopLeft(circle, cPoint_Pos_OTopLeft);
+                ShapeManipulate.Show_Circle_OTopLeft(circle, cPoint_Pos_OTopLeft, brush_goCircleFill);
 
                 wholeGrid.Children.Add(circle);
             }

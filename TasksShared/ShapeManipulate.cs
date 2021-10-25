@@ -8,47 +8,29 @@ namespace TasksShared
 {
     public class ShapeManipulate
     {
-        public static Ellipse Create_Circle(double diameter)
-        {/*
-            Create the circle
 
-            Args:
-                Diameter: the Diameter of the Circle in Pixal
-
-            */
-
-            // Create an Ellipse  
+        public static Ellipse Create_Circle(int diameter)
+        {
             Ellipse circle = new Ellipse
             {
-
-                // set the size, position of circleGo
-                Height = diameter,
-                Width = diameter
+                Width = diameter,
+                Height = diameter
             };
-
             return circle;
         }
 
-
-        public static Ellipse Show_Circle_OTopLeft(Ellipse circle, int[] cPoint_Pos_OTopLeft, SolidColorBrush brush_Fill)
-        {/*
-            Show the circle at cPoint_Pos_OTopLeft (Origin in the topLeft of the Screen)
-
-            Args:
-                circle: to Be Showed Circle
-
-                cPoint_Pos_OTopLeft: the x, y Positions of the Circle center in Pixal (Origin in the topLeft of the Screen)
-
-            */
-
-            circle = Move_Circle_OTopLeft(circle, cPoint_Pos_OTopLeft);
-            circle.Fill = brush_Fill;
-            circle.Visibility = Visibility.Visible;
-
-            return circle; 
+        public static Rectangle Create_NogoRect(int width, int height)
+        {
+            Rectangle rect = new Rectangle
+            {
+                Width = width,
+                Height = height
+            };
+            return rect;
         }
 
-        public static Ellipse Move_Circle_OTopLeft(Ellipse circle, int[] cPoint_Pos_OTopLeft)
+
+        private static Ellipse Move_Circle_OTopLeft(Ellipse circle, int[] cPoint_Pos_OTopLeft)
         {/*
             Move the circle into cPoint_Pos_OTopLeft (Origin in the topLeft of the Screen)
 
@@ -68,23 +50,62 @@ namespace TasksShared
             return circle;
         }
 
-
-
-        public static Rectangle Create_NogoRect(double height, double width)
+        public static Ellipse Show_Circle_OTopLeft(Ellipse circle, int[] cPoint_Pos_OTopLeft, SolidColorBrush brush_Fill)
         {/*
-            Create the circle
+            Show the circle at cPoint_Pos_OTopLeft (Origin in the topLeft of the Screen)
 
             Args:
-                height, width: the height and width of the rectangle in Pixal
+                circle: to Be Showed Circle
+
+                cPoint_Pos_OTopLeft: the x, y Positions of the Circle center in Pixal (Origin in the topLeft of the Screen)
 
             */
 
-            Rectangle rect = new Rectangle
-            {
-                Height = height,
-                Width = width
-            };
-            return rect;
+            circle = Move_Circle_OTopLeft(circle, cPoint_Pos_OTopLeft);
+            circle.Fill = brush_Fill;
+            circle.Visibility = Visibility.Visible;
+
+            return circle; 
+        }
+
+
+
+        private static Rectangle Move_Rectangle_OTopLeft(Rectangle rectangle, int[] cPoint_Pos_OTopLeft)
+        {/*
+            Move the rectangle into cPoint_Pos_OTopLeft (Origin in the topLeft of the Screen)
+
+            Args:
+                rectangle: to Be Moved Rectangle
+
+                cPoint_Pos_OTopLeft: the x, y Positions of the rectangle center in Pixal (Origin in the topLeft of the Screen)
+
+            */
+
+
+            rectangle.VerticalAlignment = VerticalAlignment.Top;
+            rectangle.HorizontalAlignment = HorizontalAlignment.Left;
+
+            rectangle.Margin = new Thickness(cPoint_Pos_OTopLeft[0] - rectangle.Width / 2, cPoint_Pos_OTopLeft[1] - rectangle.Height / 2, 0, 0);
+
+            return rectangle;
+        }
+
+        public static Rectangle Show_Rect_OTopLeft(Rectangle rectangle, int[] cPoint_Pos_OTopLeft, SolidColorBrush brush_Fill)
+        {/*
+            Show the rectangle at cPoint_Pos_OTopLeft (Origin in the topLeft of the Screen)
+
+            Args:
+                rectangle: to Be Showed Rectangle
+
+                cPoint_Pos_OTopLeft: the x, y Positions of the Rectangle center in Pixal (Origin in the topLeft of the Screen)
+            */
+
+            rectangle = Move_Rectangle_OTopLeft(rectangle, cPoint_Pos_OTopLeft);
+            rectangle.Fill = brush_Fill;
+            rectangle.Visibility = Visibility.Visible;
+
+            return rectangle;
+
         }
 
 
@@ -129,15 +150,19 @@ namespace TasksShared
         {
             length = len;
 
-            horiLine = new Line();
-            horiLine.X1 = 0;
-            horiLine.Y1 = 0;
-            horiLine.X2 = len;
+            horiLine = new Line
+            {
+                X1 = 0,
+                Y1 = 0,
+                X2 = len
+            };
             horiLine.Y2 = horiLine.Y1;
 
-            vertLine = new Line();
-            vertLine.X1 = 0;
-            vertLine.Y1 = 0;
+            vertLine = new Line
+            {
+                X1 = 0,
+                Y1 = 0
+            };
             vertLine.X2 = vertLine.X1;
             vertLine.Y2 = len;
         }
