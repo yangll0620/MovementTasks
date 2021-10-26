@@ -1,0 +1,93 @@
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
+
+namespace COTTask
+{
+    class Config_COT
+    {
+        [JsonProperty(PropertyName = "NHP Name")]
+        public string NHPName;
+
+        [JsonProperty(PropertyName = "saved folder")]
+        public string saved_folder;
+
+        [JsonProperty(PropertyName = "Times")]
+        public ConfigTimes configTimes;
+
+
+        [JsonProperty(PropertyName = "Target")]
+        public ConfigTarget configTarget;
+
+        [JsonProperty(PropertyName = "Colors")]
+        public ConfigColors configColors;
+
+
+        public string audioFile_Correct, audioFile_Error;
+    }
+
+    class ConfigTimes
+    {
+        [JsonProperty(PropertyName = "Ready Show Time Range")]
+        public float[] tRange_ReadyTime;
+
+        [JsonProperty(PropertyName = "Max Reaction Time")]
+        public float tMax_ReactionTime;
+
+        [JsonProperty(PropertyName = "Max Reach Time")]
+        public float tMax_ReachTime;
+
+        [JsonProperty(PropertyName = "Visual Feedback Show Time")]
+        public float t_VisfeedbackShow;
+
+        [JsonProperty(PropertyName = "Inter Trials Time")]
+        public float t_InterTrial;
+
+        [JsonProperty(PropertyName = "Juice Correct Given Time")]
+        public float t_JuicerCorrectGiven;
+    }
+
+
+    class ConfigTarget
+    {
+        [JsonProperty(PropertyName = "Target Diameter (cm)")]
+        public float targetDiaCM;
+
+        [JsonProperty(PropertyName = "Target No of Positions")]
+        public int targetNoOfPositions;
+
+        [JsonProperty(PropertyName = "Optional Positions")]
+        public List<int[]> optPostions_OCenter_List;
+    }
+
+
+    class ConfigColors
+    {
+        [JsonProperty(PropertyName = "Target Fill Color")]
+        public string targetFillColorStr;
+
+        [JsonProperty(PropertyName = "Wait Start Background")]
+        public string BKWaitTrialColorStr;
+
+        [JsonProperty(PropertyName = "Ready Background")]
+        public string BKReadyColorStr;
+
+
+        [JsonProperty(PropertyName = "Target Shown Background")]
+        public string BKTargetShownColorStr;
+
+        [JsonProperty(PropertyName = "Correct Fill")]
+        public string CorrFillColorStr;
+
+        [JsonProperty(PropertyName = "Correct Outline")]
+        public string CorrOutlineColorStr;
+
+        [JsonProperty(PropertyName = "Error Fill")]
+        public string ErrorFillColorStr;
+
+        [JsonProperty(PropertyName = "Error Outline")]
+        public string ErrorOutlineColorStr;
+
+        [JsonProperty(PropertyName = "Error Crossing")]
+        public string ErrorCrossingColorStr;
+    }
+}

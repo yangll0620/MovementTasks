@@ -75,6 +75,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Config_COT.cs" />
+    <Compile Include="COTTask_SetupColorsWin.xaml.cs">
+      <DependentUpon>COTTask_SetupColorsWin.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="COTTask_SetupTargetWin.xaml.cs">
+      <DependentUpon>COTTask_SetupTargetWin.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="COTTask_SetupTimeWin.xaml.cs">
+      <DependentUpon>COTTask_SetupTimeWin.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="NativeMethods.cs" />
+    <Compile Include="SerialPortIO8.cs" />
     <Compile Include="Utility.cs" />
     <Page Include="COTTaskUI.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -89,6 +101,18 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="COTTask_PresentWin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="COTTask_SetupColorsWin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="COTTask_SetupTargetWin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="COTTask_SetupTimeWin.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -137,6 +161,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Audios\Correct.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Audios\Error.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -27,8 +27,6 @@
                 </MenuItem>
 
                 <MenuItem x:Name="menu_Tools" Header="Tools">
-                    <MenuItem Header="_Test Touchpad, Juicer " Click="btnTestTouchpadJuicer_Click"/>
-                    <MenuItem Header="_Test Window " Click="MenuItem_NewWindow"/>
                     <MenuItem Header="_Key Hots" Click="MenuItem_KeyHots"/>
                 </MenuItem>
             </Menu>

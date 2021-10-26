@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Windows;
 using System.Windows.Media;
+
 namespace COTTask
 {
     /// <summary>

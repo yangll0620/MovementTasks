@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.IO;
+using swf = System.Windows.Forms;
+using sd = System.Drawing;
+using Newtonsoft.Json;
+using System.Windows.Input;
+using System.Windows.Interop;
+
 
 namespace COTTask
 {
@@ -29,7 +27,7 @@ namespace COTTask
         public bool showCloseCircle;
 
         private List<Window> openedWins = new List<Window>();
-        presentation taskPresentWin;
+        COTTask_PresentWin taskPresentWin;
 
         // Strings stoing the Colors
         public string targetFillColorStr, targetOutlineColorStr;
@@ -178,24 +176,6 @@ namespace COTTask
             }
         }
 
-        private void btnTestTouchpadJuicer_Click(object sender, RoutedEventArgs e)
-        {
-            TestStartpadJuicerWin Win_TestStartpadJuicer = new TestStartpadJuicerWin(this)
-            {
-
-                // Set Owner
-                Owner = this
-            };
-
-            // Get the first not Primary Screen 
-            swf.Screen showMainScreen = Utility.Detect_oneNonPrimaryScreen();
-            // Show the  MainWindow on the Touch Screen
-            sd.Rectangle Rect_showMainScreen = showMainScreen.Bounds;
-            Win_TestStartpadJuicer.Top = Rect_showMainScreen.Top;
-            Win_TestStartpadJuicer.Left = Rect_showMainScreen.Left;
-
-            Win_TestStartpadJuicer.Show();
-        }
 
         private void saveInputParameters()
         {
@@ -259,13 +239,6 @@ namespace COTTask
             }
         }
 
-
-        private void MenuItem_NewWindow(object sender, RoutedEventArgs e)
-        {
-            Window1 testWind = new Window1(this);
-            testWind.Show();
-
-        }
 
         private void menuSaveConf_Click(object sender, RoutedEventArgs e)
         {
@@ -354,7 +327,7 @@ namespace COTTask
 
         private void MenuItem_SetupTime(object sender, RoutedEventArgs e)
         {
-            SetupTimeWin Win_SetupTime = new SetupTimeWin(this);
+            COTTask_SetupTimeWin Win_SetupTime = new COTTask_SetupTimeWin(this);
 
             // Get the first not Primary Screen 
             swf.Screen showMainScreen = Utility.Detect_oneNonPrimaryScreen();
@@ -371,7 +344,7 @@ namespace COTTask
 
         private void MenuItem_SetupColors(object sender, RoutedEventArgs e)
         {
-            SetupColorsWin Win_SetupColors = new SetupColorsWin(this);
+            COTTask_SetupColorsWin Win_SetupColors = new COTTask_SetupColorsWin(this);
 
 
             // Get the first not Primary Screen 
@@ -391,7 +364,7 @@ namespace COTTask
 
         private void MenuItem_SetupTarget(object sender, RoutedEventArgs e)
         {
-            SetupTargetsWin Win_SetupTarget = new SetupTargetsWin(this);
+            COTTask_SetupTargetWin Win_SetupTarget = new COTTask_SetupTargetWin(this);
 
 
             // Get the first not Primary Screen 
@@ -517,7 +490,7 @@ namespace COTTask
 
 
             // Combine all configs
-            Config config = new Config();
+            Config_COT config = new Config_COT();
             config.saved_folder = textBox_savedFolder.Text;
             config.NHPName = textBox_NHPName.Text;
             config.configTimes = configTimes;
@@ -575,7 +548,7 @@ namespace COTTask
             // Create Presentation Instance only at the First Start Click
             if (hasStartedPresention == false)
             {
-                taskPresentWin = new presentation(this)
+                taskPresentWin = new COTTask_PresentWin(this)
                 {
                     Top = Rect_touchScreen.Top,
                     Left = Rect_touchScreen.Left,
@@ -800,5 +773,4 @@ namespace COTTask
             InitializeHotKey(key_Start, HotKeyId_Start);
         }
     }
-}
 }
