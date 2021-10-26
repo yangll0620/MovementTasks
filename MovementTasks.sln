@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovementTaskUI", "MovementT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TasksShared", "TasksShared\TasksShared.csproj", "{F9CDCEEF-09DD-43F6-940D-876DE2810A9C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COTTask", "COTTask\COTTask.csproj", "{7E8B195C-B491-4B2C-B261-CBFD83FB966B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{F9CDCEEF-09DD-43F6-940D-876DE2810A9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9CDCEEF-09DD-43F6-940D-876DE2810A9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9CDCEEF-09DD-43F6-940D-876DE2810A9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E8B195C-B491-4B2C-B261-CBFD83FB966B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E8B195C-B491-4B2C-B261-CBFD83FB966B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E8B195C-B491-4B2C-B261-CBFD83FB966B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E8B195C-B491-4B2C-B261-CBFD83FB966B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
