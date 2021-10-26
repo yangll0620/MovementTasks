@@ -81,7 +81,7 @@ namespace GoNogoTask
         // objects of Go cirle, nogo Rectangle, lines of the crossing, and two white points
         Ellipse circleGo;
         Rectangle rectNogo;
-        Crossing crossing;
+        Line vertLine, horiLine;
 
         // diameter for crossing, circle, and square
         int targetDiameterPixal;
@@ -158,6 +158,7 @@ namespace GoNogoTask
 
 
         SerialPort serialPort_IO8;
+        ScreenTouchState screenTouchstate;
 
 
         GiveJuicerState giveJuicerState;
@@ -190,7 +191,7 @@ namespace GoNogoTask
         Point circleGo_centerPoint_Pixal;
 
 
-        long timestamp_0;
+        long timestamp_StartPresent;
         bool PresentTrial;
         // selected Target Position Index for Current Presented Trial
         int currTrialTargetPosInd;
@@ -208,70 +209,75 @@ namespace GoNogoTask
             Touch.FrameReported += new TouchFrameEventHandler(Touch_FrameReported);
 
             parentMainUI = parentWin;
-
-            WindowState = WindowState.Maximized;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            
+            WindowState = WindowState.Maximized;
+
+            GetSetupSingleParameters();
 
             NewVariables();
-
-            GetSetupParameters();
+            FillSetupNewedVariables();
 
             Generate_IO8EventTDTCmd();
-
-            PrepBef_Present();
-
-            Write_TrialSetupInformation();
         }
 
         private void Generate_IO8EventTDTCmd()
         {
-            TDTCmd_InitState = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_InitState);
-            TDTCmd_TouchTriggerTrial = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_TouchTriggerTrial);
-            TDTCmd_ReadyShown = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_ReadyShown);
-            TDTCmd_ReadyWaitTooShort = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_ReadyWaitTooShort);
-            TDTCmd_GoTargetShown = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_GoTargetShown);
-            TDTCmd_GoReactionTooLong = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_GoReactionTooLong);
-            TDTCmd_GoReachTooLong = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_GoReachTooLong);
-            TDTCmd_GoTouched = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_GoTouched);
-            TDTCmd_GoTouchedHit = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_GoTouchedHit);
-            TDTCmd_GoTouchedMiss = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_GoTouchedMiss);
-            TDTCmd_CueShown = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_CueShown);
-            TDTCmd_CueWaitTooShort = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_CueWaitTooShort);
-            TDTCmd_noGoTargetShown = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_noGoTargetShown);
-            TDTCmd_noGoEnoughTCorrectFeedback = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_noGoEnoughTCorrectFeedback);
-            TDTCmd_noGoLeftEarlyErrorFeedback = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_noGoLeftEarlyErrorFeedback);
+            try
+            {
+                TDTCmd_InitState = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_InitState);
+                TDTCmd_TouchTriggerTrial = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_TouchTriggerTrial);
+                TDTCmd_ReadyShown = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_ReadyShown);
+                TDTCmd_ReadyWaitTooShort = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_ReadyWaitTooShort);
+                TDTCmd_GoTargetShown = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_GoTargetShown);
+                TDTCmd_GoReactionTooLong = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_GoReactionTooLong);
+                TDTCmd_GoReachTooLong = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_GoReachTooLong);
+                TDTCmd_GoTouched = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_GoTouched);
+                TDTCmd_GoTouchedHit = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_GoTouchedHit);
+                TDTCmd_GoTouchedMiss = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_GoTouchedMiss);
+                TDTCmd_CueShown = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_CueShown);
+                TDTCmd_CueWaitTooShort = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_CueWaitTooShort);
+                TDTCmd_noGoTargetShown = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_noGoTargetShown);
+                TDTCmd_noGoEnoughTCorrectFeedback = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_noGoEnoughTCorrectFeedback);
+                TDTCmd_noGoLeftEarlyErrorFeedback = SerialPortIO8Manipulate.Convert2_IO8EventCmd_Bit5to8(Code_noGoLeftEarlyErrorFeedback);
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show(MethodBase.GetCurrentMethod().Name + " " + e.Message);
+            }
         }
 
         private void PrepBef_Present()
         {
-
-            // create a serial Port IO8 instance, and open it
             
             try
             {
-                serialPort_IO8.Open();
+                try
+                {
+                    serialPort_IO8.Open();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error Message", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
+                globalWatch.Restart();
+                thread_ReadWrite_IO8.Start();
+
+                // Init Trial Information
+                Update_FeedbackTrialsInformation();
+
+                //Write Trial Setup Information
+                Write_TrialSetupInformation();
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                MessageBox.Show(ex.Message, "Error Message", MessageBoxButton.OK, MessageBoxImage.Error);
+
             }
-            // Thread for Read and Write IO8
-            thread_ReadWrite_IO8 = new Thread(new ThreadStart(Thread_ReadWrite_IO8));
 
-
-            // init a global stopwatch
-            globalWatch = new Stopwatch();
-            tpoints1TouchWatch = new Stopwatch();
-
-            // Init Trial Information
-            Update_FeedbackTrialsInformation();
-
-            //Write Trial Setup Information
-            //Write_TrialSetupInformation();
+            
         }
 
         private void Thread_ReadWrite_IO8()
@@ -282,119 +288,226 @@ namespace GoNogoTask
 
             try
             {
-                serialPort_IO8.WriteLine(codeLow_JuicerPin);
-            }
-            catch (InvalidOperationException) { }
-
-            startpadReadWatch.Start();
-            while (serialPort_IO8.IsOpen)
-            {
                 try
                 {
-                    // ----- Juicer Control
-                    if (giveJuicerState == GiveJuicerState.CorrectGiven)
+                    serialPort_IO8.WriteLine(codeLow_JuicerPin);
+                }
+                catch (InvalidOperationException) { }
+
+                startpadReadWatch.Start();
+                while (serialPort_IO8.IsOpen)
+                {
+                    try
                     {
-
-                        serialPort_IO8.WriteLine(codeHigh_JuicerPin);
-                        Thread.Sleep(t_JuicerCorrectGivenMS);
-                        serialPort_IO8.WriteLine(codeLow_JuicerPin);
-                        giveJuicerState = GiveJuicerState.No;
-                    }
-                    //--- End of Juicer Control
-
-                    //--- Startpad Read
-                    if (startpadReadWatch.ElapsedMilliseconds >= startpadReadInterval)
-                    {
-                        serialPort_IO8.WriteLine(startpad_In);
-
-                        // Read the Startpad Voltage
-                        string str_Read = serialPort_IO8.ReadExisting();
-
-                        // Restart the startpadReadWatch
-                        startpadReadWatch.Restart();
-
-                        // parse the start pad voltage 
-                        string[] str_DigIn = str_Read.Split();
-
-                        if (!String.IsNullOrEmpty(str_DigIn[0]))
+                        // ----- Juicer Control
+                        if (giveJuicerState == GiveJuicerState.CorrectGiven)
                         {
-                            int digIn = int.Parse(str_DigIn[0]);
 
-                            if (digIn == startpad_DigIn_Pressed && pressedStartpad == PressedStartpad.No)
-                            {/* time point from notouched state to touched state */
+                            serialPort_IO8.WriteLine(codeHigh_JuicerPin);
+                            Thread.Sleep(t_JuicerCorrectGivenMS);
+                            serialPort_IO8.WriteLine(codeLow_JuicerPin);
+                            giveJuicerState = GiveJuicerState.No;
+                        }
+                        //--- End of Juicer Control
 
-                                pressedStartpad = PressedStartpad.Yes;
-                            }
-                            else if (digIn == startpad_DigIn_Unpressed && pressedStartpad == PressedStartpad.Yes)
-                            {/* time point from touched state to notouched state */
+                        //--- Startpad Read
+                        if (startpadReadWatch.ElapsedMilliseconds >= startpadReadInterval)
+                        {
+                            serialPort_IO8.WriteLine(startpad_In);
 
-                                // the time point for leaving startpad
-                                timePoint_StartpadLeft = globalWatch.ElapsedMilliseconds;
-                                pressedStartpad = PressedStartpad.No;
+                            // Read the Startpad Voltage
+                            string str_Read = serialPort_IO8.ReadExisting();
+
+                            // Restart the startpadReadWatch
+                            startpadReadWatch.Restart();
+
+                            // parse the start pad voltage 
+                            string[] str_DigIn = str_Read.Split();
+
+                            if (!String.IsNullOrEmpty(str_DigIn[0]))
+                            {
+                                int digIn = int.Parse(str_DigIn[0]);
+
+                                if (digIn == startpad_DigIn_Pressed && pressedStartpad == PressedStartpad.No)
+                                {/* time point from notouched state to touched state */
+
+                                    pressedStartpad = PressedStartpad.Yes;
+                                }
+                                else if (digIn == startpad_DigIn_Unpressed && pressedStartpad == PressedStartpad.Yes)
+                                {/* time point from touched state to notouched state */
+
+                                    // the time point for leaving startpad
+                                    timePoint_StartpadLeft = globalWatch.ElapsedMilliseconds;
+                                    pressedStartpad = PressedStartpad.No;
+                                }
                             }
                         }
                     }
+                    catch (InvalidOperationException) { }
                 }
-                catch (InvalidOperationException) { }
+
+                startpadReadWatch.Stop();
+            }
+            catch(TaskCanceledException)
+            {
+
             }
 
-            startpadReadWatch.Stop();
+            
         }
 
         private void Create_Shapes()
         {// Create necessary elements: go circle, nogo rect, and one crossing
             circleGo = ShapeManipulate.Create_Circle(targetDiameterPixal);
+            wholePresentGrid.Children.Add(circleGo);
+            wholePresentGrid.RegisterName("goCircle", circleGo);
+
             rectNogo = ShapeManipulate.Create_NogoRect(targetDiameterPixal, targetDiameterPixal);
-            crossing = ShapeManipulate.Create_OneCrossing(targetDiameterPixal);
+            wholePresentGrid.Children.Add(rectNogo);
+            wholePresentGrid.RegisterName("nogoRect", rectNogo);
+
+            Create_OneCrossing(targetDiameterPixal);
+            wholePresentGrid.UpdateLayout();
+        }
+
+        private void Create_OneCrossing(int len)
+        {/*create the crossing cue*/
+
+
+            // Create a while Brush    
+
+
+            // Create the horizontal line
+            horiLine = new Line();
+            horiLine.X1 = 0;
+            horiLine.Y1 = 0;
+            horiLine.X2 = len;
+            horiLine.Y2 = horiLine.Y1;
+
+            // horizontal line position
+            horiLine.HorizontalAlignment = HorizontalAlignment.Left;
+            horiLine.VerticalAlignment = VerticalAlignment.Top;
+
+            // horizontal line color
+            horiLine.Stroke = brush_CueCrossing;
+            // horizontal line stroke thickness
+            horiLine.StrokeThickness = 3;
+            // name
+            horiLine.Name = "crossing_horiline";
+            horiLine.Visibility = Visibility.Hidden;
+            horiLine.IsEnabled = false;
+            wholePresentGrid.Children.Add(horiLine);
+            wholePresentGrid.RegisterName(horiLine.Name, horiLine);
+
+
+            // Create the vertical line
+            vertLine = new Line();
+            vertLine.X1 = 0;
+            vertLine.Y1 = 0;
+            vertLine.X2 = vertLine.X1;
+            vertLine.Y2 = len;
+            // vertical line position
+            vertLine.HorizontalAlignment = HorizontalAlignment.Left;
+            vertLine.VerticalAlignment = VerticalAlignment.Top;
+
+            // vertical line color
+            vertLine.Stroke = brush_CueCrossing;
+            // vertical line stroke thickness
+            vertLine.StrokeThickness = 3;
+            //name
+            vertLine.Name = "crossing_vertline";
+
+            vertLine.Visibility = Visibility.Hidden;
+            vertLine.IsEnabled = false;
+            wholePresentGrid.Children.Add(vertLine);
+            wholePresentGrid.RegisterName(vertLine.Name, vertLine);
+            wholePresentGrid.UpdateLayout();
+        }
+
+
+        private void Show_OneCrossing(int[] centerPoint_Pos_OTopLeft)
+        {/*     Show One Crossing Containing One Horizontal Line and One Vertical Line
+            *   centerPoint_Pos_OCenter: The Center Point X, Y Position of the Two Lines Intersect, Origin at Screen Center
+            * 
+             */
+
+            // Change the cPoint  into Top Left Coordinate System
+            int x0 = centerPoint_Pos_OTopLeft[0];
+            int y0 = centerPoint_Pos_OTopLeft[1];
+
+
+            horiLine.Margin = new Thickness(x0 - targetDiameterPixal / 2, y0, 0, 0);
+            vertLine.Margin = new Thickness(x0, y0 - targetDiameterPixal / 2, 0, 0);
+
+            horiLine.Stroke = brush_CueCrossing;
+            vertLine.Stroke = brush_CueCrossing;
+
+            horiLine.Visibility = Visibility.Visible;
+            vertLine.Visibility = Visibility.Visible;
+
+            wholePresentGrid.UpdateLayout();
         }
 
         private void NewVariables()
         {
-            Create_Shapes();
-
-            circleGo_centerPoint_Pixal = new Point();
-
-            // Color Brushes
-            brush_BKWaitTrialStart = new SolidColorBrush();
-            brush_BKTrial = new SolidColorBrush();
-            brush_goCircleFill = new SolidColorBrush();
-            brush_nogoRectFill = new SolidColorBrush();
-            brush_CueCrossing = new SolidColorBrush();
-            brush_CorrectFill = new SolidColorBrush();
-            brush_CorrOutline = new SolidColorBrush();
-            brush_ErrorFill = new SolidColorBrush();
-            brush_ErrorOutline = new SolidColorBrush();
-
-
-            // Feedback Audios Setup
-            player_Correct = new System.Media.SoundPlayer(Properties.Resources.Correct);
-            player_Error = new System.Media.SoundPlayer(Properties.Resources.Error);
-
-
-            // TargetExeFeedback_List
-            targetPosNum = parentMainUI.goNogoTaskConfig.goNogoTargetNumPosConfig.targetNoOfPositions;
-            TargetExeFeedback_List = new List<int[]>();
-            for (int i = 0; i < targetPosNum; i++)
+            try
             {
-                TargetExeFeedback_List.Add(new int[] { 0, 0, 0, 0 });
+                // Thread for Read and Write IO8
+                thread_ReadWrite_IO8 = new Thread(Thread_ReadWrite_IO8);
+
+                // init a global stopwatch
+                globalWatch = new Stopwatch();
+                tpoints1TouchWatch = new Stopwatch();
+
+                Create_Shapes();
+
+                circleGo_centerPoint_Pixal = new Point();
+
+                // Color Brushes
+                brush_BKWaitTrialStart = new SolidColorBrush();
+                brush_BKTrial = new SolidColorBrush();
+                brush_goCircleFill = new SolidColorBrush();
+                brush_nogoRectFill = new SolidColorBrush();
+                brush_CueCrossing = new SolidColorBrush();
+                brush_CorrectFill = new SolidColorBrush();
+                brush_CorrOutline = new SolidColorBrush();
+                brush_ErrorFill = new SolidColorBrush();
+                brush_ErrorOutline = new SolidColorBrush();
+
+
+                // Feedback Audios Setup
+                player_Correct = new System.Media.SoundPlayer(Properties.Resources.Correct);
+                player_Error = new System.Media.SoundPlayer(Properties.Resources.Error);
+
+
+                // TargetExeFeedback_List
+                TargetExeFeedback_List = new List<int[]>();
+                for (int i = 0; i < targetPosNum; i++)
+                {
+                    TargetExeFeedback_List.Add(new int[] { 0, 0, 0, 0 });
+                }
+
+                // serialPort_IO8
+                serialPort_IO8 = new SerialPort
+                {
+                    PortName = parentMainUI.serialPortIO8_name,
+                    BaudRate = 115200
+                };
+
+                // trialTargetInfo_PerSess_List Storing trial Target Info [posIndex, GoNogoIndex]
+                trialTargetInfo_PerSess_List = Create_TrialTargetInfo_List(totalTrialNumPerPosSess, nogoTrialNumPerPosSess, targetPosNum);
+
+
+                // optPostions_OTopLeft_List: optional positions
+                optPostions_OTopLeft_List = new List<int[]>();
+                for (int i = 0; i < targetPosNum; i++)
+                {
+                    optPostions_OTopLeft_List.Add(new int[] { 0, 0 });
+                }
             }
-
-            // serialPort_IO8
-            serialPort_IO8 = new SerialPort
+            catch (Exception e)
             {
-                PortName = parentMainUI.serialPortIO8_name,
-                BaudRate = 115200
-            };
-
-            // trialTargetInfo_PerSess_List Storing trial Target Info [posIndex, GoNogoIndex]
-            trialTargetInfo_PerSess_List = Create_TrialTargetInfo_List(totalTrialNumPerPosSess, nogoTrialNumPerPosSess, targetPosNum);
-
-
-            // optPostions_OTopLeft_List: optional positions
-            optPostions_OTopLeft_List = new List<int[]>();
-            for (int i = 0; i < targetPosNum; i++)
-            {
-                optPostions_OTopLeft_List.Add(new int[] { 0, 0});
+                MessageBox.Show(MethodBase.GetCurrentMethod().Name + " " + e.Message);
             }
         }
 
@@ -431,96 +544,125 @@ namespace GoNogoTask
             return trialTargetInfo_List;
         }
 
-        private void GetSetupParameters()
+        private void GetSetupSingleParameters()
         {/* get the setup from the parent interface */
 
-
-            GoNogoTaskConfig goNogoTaskConfig = parentMainUI.goNogoTaskConfig;
-
-            totalTrialNumPerPosSess = goNogoTaskConfig.totalTrialNumPerPosSess;
-            nogoTrialNumPerPosSess = goNogoTaskConfig.nogoTrialNumPerPosSess;
-
-            file_saved = parentMainUI.file_saved;
-
-            // TargetNumPos Setup
-            GoNogoTargetNumPosConfig goNogoTargetNumPosConfig = goNogoTaskConfig.goNogoTargetNumPosConfig;
-            targetDiameterPixal = Utility.Inch2Pixal(goNogoTargetNumPosConfig.targetDiaInch);
-            targetPosNum = goNogoTargetNumPosConfig.optPostions_OCenter_List.Count;
-            swf.Screen touchScreen = ScreenDetect.TaskPresentTouchScreen();
-            int width = touchScreen.Bounds.Width, height = touchScreen.Bounds.Height;
-            for (int i = 0; i < targetPosNum; i++)
+            try
             {
-                int[] xy_OCenter = goNogoTargetNumPosConfig.optPostions_OCenter_List[i];
+                GoNogoTaskConfig goNogoTaskConfig = parentMainUI.goNogoTaskConfig;
 
-                optPostions_OTopLeft_List[i] = ShapeManipulate.ConvertXY_OCenter2TopLeft(xy_OCenter, width, height);
+                totalTrialNumPerPosSess = goNogoTaskConfig.totalTrialNumPerPosSess;
+                nogoTrialNumPerPosSess = goNogoTaskConfig.nogoTrialNumPerPosSess;
+
+                file_saved = parentMainUI.file_saved;
+
+                // TargetNumPos Setup
+                GoNogoTargetNumPosConfig goNogoTargetNumPosConfig = goNogoTaskConfig.goNogoTargetNumPosConfig;
+                targetDiameterPixal = Utility.Inch2Pixal(goNogoTargetNumPosConfig.targetDiaInch);
+                targetPosNum = goNogoTargetNumPosConfig.optPostions_OCenter_List.Count;
+                
+
+                // Time Setup
+                GoNogoTimeConfig goNogoTimeConfig = goNogoTaskConfig.goNogoTimeConfig;
+                tRange_ReadyTimeS = goNogoTimeConfig.tRange_ReadyTimeS;
+                tRange_CueTimeS = goNogoTimeConfig.tRange_CueTimeS;
+                tRange_NogoShowTimeS = goNogoTimeConfig.tRange_NogoShowTimeS;
+                tMax_ReactionTimeMS = goNogoTimeConfig.t_MaxReactionTimeS * 1000;
+                tMax_ReachTimeMS = goNogoTimeConfig.t_MaxReachTimeS * 1000;
+                t_InterTrialMS = (int)(goNogoTimeConfig.t_InterTrialS * 1000);
+                t_VisfeedbackShowMS = (int)(goNogoTimeConfig.t_VisfeedbackShowS * 1000);
+                t_JuicerCorrectGivenMS = (int)(goNogoTimeConfig.t_JuicerCorrectGivenS * 1000);
+
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(MethodBase.GetCurrentMethod().Name + " " + e.Message);
             }
 
 
-            // Time Setup
-            GoNogoTimeConfig goNogoTimeConfig = goNogoTaskConfig.goNogoTimeConfig;
-            tRange_ReadyTimeS = goNogoTimeConfig.tRange_ReadyTimeS;
-            tRange_CueTimeS = goNogoTimeConfig.tRange_CueTimeS;
-            tRange_NogoShowTimeS = goNogoTimeConfig.tRange_NogoShowTimeS;
-            tMax_ReactionTimeMS = goNogoTimeConfig.t_MaxReactionTimeS * 1000;
-            tMax_ReachTimeMS = goNogoTimeConfig.t_MaxReachTimeS * 1000;
-            t_InterTrialMS = (int)(goNogoTimeConfig.t_InterTrialS * 1000);
-            t_VisfeedbackShowMS = (int)(goNogoTimeConfig.t_VisfeedbackShowS * 1000);
-            t_JuicerCorrectGivenMS = (int)(goNogoTimeConfig.t_JuicerCorrectGivenS * 1000);
-
-
-            // Colors Setup
-            GoNogoColorConfig goNogoColorConfig = goNogoTaskConfig.goNogoColorConfig;
-            brush_BKWaitTrialStart.Color = (Color)(typeof(Colors).GetProperty(goNogoColorConfig.BKWaitTrialColorStr) as PropertyInfo).GetValue(null, null);
-            brush_BKTrial.Color = (Color)(typeof(Colors).GetProperty(goNogoColorConfig.BKTrialColorStr) as PropertyInfo).GetValue(null, null);
-            brush_goCircleFill.Color = (Color)(typeof(Colors).GetProperty(goNogoColorConfig.goFillColorStr) as PropertyInfo).GetValue(null, null);
-            brush_nogoRectFill.Color = (Color)(typeof(Colors).GetProperty(goNogoColorConfig.nogoFillColorStr) as PropertyInfo).GetValue(null, null);
-            brush_CueCrossing.Color = (Color)(typeof(Colors).GetProperty(goNogoColorConfig.cueCrossingColorStr) as PropertyInfo).GetValue(null, null);
-            brush_CorrectFill.Color = (Color)(typeof(Colors).GetProperty(goNogoColorConfig.CorrFillColorStr) as PropertyInfo).GetValue(null, null);
-            brush_CorrOutline.Color = (Color)(typeof(Colors).GetProperty(goNogoColorConfig.CorrOutlineColorStr) as PropertyInfo).GetValue(null, null);
-            brush_ErrorFill.Color = (Color)(typeof(Colors).GetProperty(goNogoColorConfig.ErrorFillColorStr) as PropertyInfo).GetValue(null, null);
-            brush_ErrorOutline.Color = (Color)(typeof(Colors).GetProperty(goNogoColorConfig.ErrorOutlineColorStr) as PropertyInfo).GetValue(null, null);
-
-            // Feedback Audios
-            if (String.Compare(goNogoTaskConfig.audioFile_Correct, "default", true) != 0)
-            {
-                player_Correct.SoundLocation = goNogoTaskConfig.audioFile_Correct;
-            }
-            if (String.Compare(goNogoTaskConfig.audioFile_Error, "default", true) != 0)
-            {
-                player_Error.SoundLocation = goNogoTaskConfig.audioFile_Error;
-            }
-
-            // 
-            circleGo.Fill = brush_goCircleFill;
-            rectNogo.Fill = brush_nogoRectFill;
-            crossing.Stroke = brush_CueCrossing;
         }
+
+
+        private void FillSetupNewedVariables()
+        {
+            try {
+
+                GoNogoTaskConfig goNogoTaskConfig = parentMainUI.goNogoTaskConfig;
+
+                swf.Screen touchScreen = ScreenDetect.TaskPresentTouchScreen();
+                int width = touchScreen.Bounds.Width, height = touchScreen.Bounds.Height;
+                for (int i = 0; i < targetPosNum; i++)
+                {
+                    int[] xy_OCenter = goNogoTaskConfig.goNogoTargetNumPosConfig.optPostions_OCenter_List[i];
+
+                    optPostions_OTopLeft_List[i] = ShapeManipulate.ConvertXY_OCenter2TopLeft(xy_OCenter, width, height);
+                }
+
+
+                // Colors Setup
+                GoNogoColorConfig goNogoColorConfig = goNogoTaskConfig.goNogoColorConfig;
+                brush_BKWaitTrialStart.Color = (Color)(typeof(Colors).GetProperty(goNogoColorConfig.BKWaitTrialColorStr) as PropertyInfo).GetValue(null, null);
+                brush_BKTrial.Color = (Color)(typeof(Colors).GetProperty(goNogoColorConfig.BKTrialColorStr) as PropertyInfo).GetValue(null, null);
+                brush_goCircleFill.Color = (Color)(typeof(Colors).GetProperty(goNogoColorConfig.goFillColorStr) as PropertyInfo).GetValue(null, null);
+                brush_nogoRectFill.Color = (Color)(typeof(Colors).GetProperty(goNogoColorConfig.nogoFillColorStr) as PropertyInfo).GetValue(null, null);
+                brush_CueCrossing.Color = (Color)(typeof(Colors).GetProperty(goNogoColorConfig.cueCrossingColorStr) as PropertyInfo).GetValue(null, null);
+                brush_CorrectFill.Color = (Color)(typeof(Colors).GetProperty(goNogoColorConfig.CorrFillColorStr) as PropertyInfo).GetValue(null, null);
+                brush_CorrOutline.Color = (Color)(typeof(Colors).GetProperty(goNogoColorConfig.CorrOutlineColorStr) as PropertyInfo).GetValue(null, null);
+                brush_ErrorFill.Color = (Color)(typeof(Colors).GetProperty(goNogoColorConfig.ErrorFillColorStr) as PropertyInfo).GetValue(null, null);
+                brush_ErrorOutline.Color = (Color)(typeof(Colors).GetProperty(goNogoColorConfig.ErrorOutlineColorStr) as PropertyInfo).GetValue(null, null);
+
+                // Feedback Audios
+                if (String.Compare(goNogoTaskConfig.audioFile_Correct, "default", true) != 0)
+                {
+                    player_Correct.SoundLocation = goNogoTaskConfig.audioFile_Correct;
+                }
+                if (String.Compare(goNogoTaskConfig.audioFile_Error, "default", true) != 0)
+                {
+                    player_Error.SoundLocation = goNogoTaskConfig.audioFile_Error;
+                }
+
+                // 
+                circleGo.Fill = brush_goCircleFill;
+                rectNogo.Fill = brush_nogoRectFill;
+            }
+            catch(Exception)
+            {
+
+            }
+        }
+
 
         private void Update_FeedbackTrialsInformation()
         {/* Init the Feedback Trial Information in the Mainwindow */
 
-            trialNLeftInSess = totalTrialNumPerPosSess * targetPosNum;
+            try
+            {
+                trialNLeftInSess = totalTrialNumPerPosSess * targetPosNum;
 
-            // Update Main Window Feedback 
-            parentMainUI.textBox_feedback_currSessioni.Text = currSessi.ToString();
-            parentMainUI.textBox_feedback_TrialsLeftCurrSess.Text = trialNLeftInSess.ToString();
+                // Update Main Window Feedback 
+                parentMainUI.textBox_feedback_currSessioni.Text = currSessi.ToString();
+                parentMainUI.textBox_feedback_TrialsLeftCurrSess.Text = trialNLeftInSess.ToString();
 
-            int[] targetExeFeedback;
-            targetExeFeedback = TargetExeFeedback_List[0];
-            parentMainUI.textBox_feedback_Targ0TotalGo.Text = targetExeFeedback[0].ToString();
-            parentMainUI.textBox_feedback_Targ0SuccessGo.Text = targetExeFeedback[1].ToString();
-            parentMainUI.textBox_feedback_Targ0TotalNogo.Text = targetExeFeedback[2].ToString();
-            parentMainUI.textBox_feedback_Targ0SuccessNogo.Text = targetExeFeedback[3].ToString();
-            targetExeFeedback = TargetExeFeedback_List[1];
-            parentMainUI.textBox_feedback_Targ1TotalGo.Text = targetExeFeedback[0].ToString();
-            parentMainUI.textBox_feedback_Targ1SuccessGo.Text = targetExeFeedback[1].ToString();
-            parentMainUI.textBox_feedback_Targ1TotalNogo.Text = targetExeFeedback[2].ToString();
-            parentMainUI.textBox_feedback_Targ1SuccessNogo.Text = targetExeFeedback[3].ToString();
-            targetExeFeedback = TargetExeFeedback_List[2];
-            parentMainUI.textBox_feedback_Targ2TotalGo.Text = targetExeFeedback[0].ToString();
-            parentMainUI.textBox_feedback_Targ2SuccessGo.Text = targetExeFeedback[1].ToString();
-            parentMainUI.textBox_feedback_Targ2TotalNogo.Text = targetExeFeedback[2].ToString();
-            parentMainUI.textBox_feedback_Targ2SuccessNogo.Text = targetExeFeedback[3].ToString();
+                int[] targetExeFeedback;
+                targetExeFeedback = TargetExeFeedback_List[0];
+                parentMainUI.textBox_feedback_Targ0TotalGo.Text = targetExeFeedback[0].ToString();
+                parentMainUI.textBox_feedback_Targ0SuccessGo.Text = targetExeFeedback[1].ToString();
+                parentMainUI.textBox_feedback_Targ0TotalNogo.Text = targetExeFeedback[2].ToString();
+                parentMainUI.textBox_feedback_Targ0SuccessNogo.Text = targetExeFeedback[3].ToString();
+                targetExeFeedback = TargetExeFeedback_List[1];
+                parentMainUI.textBox_feedback_Targ1TotalGo.Text = targetExeFeedback[0].ToString();
+                parentMainUI.textBox_feedback_Targ1SuccessGo.Text = targetExeFeedback[1].ToString();
+                parentMainUI.textBox_feedback_Targ1TotalNogo.Text = targetExeFeedback[2].ToString();
+                parentMainUI.textBox_feedback_Targ1SuccessNogo.Text = targetExeFeedback[3].ToString();
+                targetExeFeedback = TargetExeFeedback_List[2];
+                parentMainUI.textBox_feedback_Targ2TotalGo.Text = targetExeFeedback[0].ToString();
+                parentMainUI.textBox_feedback_Targ2SuccessGo.Text = targetExeFeedback[1].ToString();
+                parentMainUI.textBox_feedback_Targ2TotalNogo.Text = targetExeFeedback[2].ToString();
+                parentMainUI.textBox_feedback_Targ2SuccessNogo.Text = targetExeFeedback[3].ToString();
+            } catch (Exception e)
+            {
+                MessageBox.Show(MethodBase.GetCurrentMethod().Name + " " + e.Message);
+            }
         }
 
 
@@ -534,6 +676,14 @@ namespace GoNogoTask
                 file.WriteLine(String.Format("{0, -40}:  {1}", "Unit of Touch Point X Y Position", "Pixal"));
                 file.WriteLine(String.Format("{0, -40}:  {1}", "Touch Point X Y Coordinate System", "(0,0) in Top Left Corner, Right and Down Direction is Positive"));
                 file.WriteLine(String.Format("{0, -40}:  {1}", "Unit of Event TimePoint/Time", "Second"));
+                file.WriteLine("\n");
+
+                file.WriteLine(String.Format("{0, -40}:  {1}", "Optional Target Positions in Pixal", "Origin at TopLeft, Down Right is Positive"));
+                for (int i = 0; i < optPostions_OTopLeft_List.Count; i++)
+                {
+                    int[] position = optPostions_OTopLeft_List[i];
+                    file.WriteLine(String.Format("{0, -40}:{1}, {2}", "Postion " + i.ToString(), position[0], position[1]));
+                }
                 file.WriteLine("\n");
 
                 file.WriteLine(String.Format("{0, -40}", "Event Codes in TDT System:"));
@@ -579,16 +729,15 @@ namespace GoNogoTask
         {
             try
             {
+                PrepBef_Present();
+
                 float t_CueS, t_ReadyS, t_noGoShowS;
                 int[] pos_Taget_OTopLeft;
                 int totalTrialNumPerSess = totalTrialNumPerPosSess * targetPosNum;
 
-                // Present Each Trial
-                globalWatch.Restart();
-                thread_ReadWrite_IO8.Start();
-                timestamp_0 = DateTime.Now.Ticks;
                 int totalTriali = 0;
                 PresentTrial = true;
+                timestamp_StartPresent = DateTime.Now.Ticks;
                 while (PresentTrial)
                 {
                     currSessi++;
@@ -896,17 +1045,23 @@ namespace GoNogoTask
                     }
                 }
             }
-            catch(TaskCanceledException)
+            catch(Exception e)
             {
-
+                MessageBox.Show(MethodBase.GetCurrentMethod().Name + " " + e.Message);
             }
         }
 
+        private void Remove_OneCrossing()
+        {
+            horiLine.Visibility = Visibility.Hidden;
+            vertLine.Visibility = Visibility.Hidden;
+        }
 
         private void Remove_All()
         {
-            crossing.Visibility = Visibility.Hidden;
-            crossing.IsEnabled = false;
+            //crossing.Hidden_Crossing();
+            Remove_OneCrossing();
+
             circleGo.Visibility = Visibility.Hidden;
             circleGo.IsEnabled = false;
             rectNogo.Visibility = Visibility.Hidden;
@@ -1065,8 +1220,10 @@ namespace GoNogoTask
                 Remove_All();
 
                 // Show the crossing at onecrossingPos_OCenter 
-                crossing.Show_Crossing_OTopLeft(crossingPos_OTopLeft);
-                //Show_OneCrossing(onecrossingPos_OCenter);
+                Show_OneCrossing(crossingPos_OTopLeft);
+  
+
+                wholePresentGrid.UpdateLayout();
 
                 serialPort_IO8.WriteLine(TDTCmd_CueShown);
                 timePoint_Interface_CueOnset = globalWatch.ElapsedMilliseconds;
@@ -1094,7 +1251,6 @@ namespace GoNogoTask
 
         }
 
-        ScreenTouchState screenTouchstate;
         private async Task Interface_Go(int[] targetPos_OTopLeft)
         {/* task for Go Interface: Show the Go Interface while Listen to the state of the startpad.
             * 1. If Reaction time < Max Reaction Time or Reach Time < Max Reach Time, end up with long reaction or reach time ERROR Interface
@@ -1112,8 +1268,10 @@ namespace GoNogoTask
             try
             {
                 // Remove the Crossing and Show the Go Circle
-                crossing.Hidden_Crossing();
+                //crossing.Hidden_Crossing();
+                Remove_OneCrossing();
                 ShapeManipulate.Show_Circle_OTopLeft(circleGo, targetPos_OTopLeft, brush_goCircleFill);
+                wholePresentGrid.UpdateLayout();
 
                 // Increased Total Go Trial Number of currTrialTargetPosInd
                 TargetExeFeedback_List[currTrialTargetPosInd][0]++;
@@ -1182,8 +1340,10 @@ namespace GoNogoTask
             try
             {
                 // Remove the Crossing and Show the noGo Rect
-                crossing.Hidden_Crossing();
+                //crossing.Hidden_Crossing();
+                Remove_OneCrossing();
                 rectNogo = ShapeManipulate.Show_Rect_OTopLeft(rectNogo, targetPos_OTopLeft, brush_nogoRectFill);
+                wholePresentGrid.UpdateLayout();
 
                 // Increased Total noGo Trial Number of currTrialTargetPosInd
                 TargetExeFeedback_List[currTrialTargetPosInd][2]++;
@@ -1416,7 +1576,7 @@ namespace GoNogoTask
             screenTouchstate = ScreenTouchState.Touched;
             TouchPointCollection touchPoints = e.GetTouchPoints(wholePresentGrid);
             bool addedNew;
-            long timestamp_now = (DateTime.Now.Ticks - timestamp_0) / TimeSpan.TicksPerMillisecond;
+            long timestamp_now = (DateTime.Now.Ticks - timestamp_StartPresent) / TimeSpan.TicksPerMillisecond;
             for (int i = 0; i < touchPoints.Count; i++)
             {
                 TouchPoint _touchPoint = touchPoints[i];

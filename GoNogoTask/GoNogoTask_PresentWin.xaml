@@ -6,8 +6,10 @@
         xmlns:local="clr-namespace:GoNogoTask"
         mc:Ignorable="d"
         Title="GoNogoTask_PresentWin" Height="450" Width="800"
-        Loaded="Window_Loaded">
+        Loaded="Window_Loaded" WindowStyle ="None">
     <Grid x:Name="wholePresentGrid">
-
+        <Grid>
+            
+        </Grid>
     </Grid>
 </Window>

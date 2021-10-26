@@ -26,6 +26,7 @@ namespace GoNogoTask
 
         swf.Screen presentTouchScreen;
 
+        GoNogoTask_PresentWin goNogoTask_PresentWin;
 
         public MainWindow()
         {
@@ -266,26 +267,46 @@ namespace GoNogoTask
 
         private void btnPause_Click(object sender, RoutedEventArgs e)
         {
+            goNogoTask_PresentWin.Hide();
+            goNogoTask_PresentWin.IsEnabled = false;
 
+            btn_start.IsEnabled = false;
+            btn_stop.IsEnabled = true;
+            btn_resume.IsEnabled = true;
+            btn_pause.IsEnabled = false;
         }
 
         private void btnResume_Click(object sender, RoutedEventArgs e)
         {
+            goNogoTask_PresentWin.Show();
+            goNogoTask_PresentWin.IsEnabled = true;
 
+            btn_start.IsEnabled = false;
+            btn_stop.IsEnabled = true;
+            btn_resume.IsEnabled = false;
+            btn_pause.IsEnabled = true;
         }
 
         private void Btn_stop_Click(object sender, RoutedEventArgs e)
         {
+            goNogoTask_PresentWin.Show();
+            goNogoTask_PresentWin.IsEnabled = true;
 
+            btn_start.IsEnabled = true;
+            btn_stop.IsEnabled = false;
+            btn_resume.IsEnabled = false;
+            btn_pause.IsEnabled = false;
         }
 
-        GoNogoTask_PresentWin goNogoTask_PresentWin;
         private void btnStart_Click(object sender, RoutedEventArgs e)
         {
             // save all the Input parameters
             saveTaskInf2Savedfile();
 
-            DisableBtnStartStop();
+            btn_start.IsEnabled = false;
+            btn_stop.IsEnabled = true;
+            btn_resume.IsEnabled = false;
+            btn_pause.IsEnabled = true;
 
 
             // Show the taskpresent Window on the Touch Screen

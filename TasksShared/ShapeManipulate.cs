@@ -142,49 +142,59 @@ namespace TasksShared
     }
 
 
-    public class Crossing : Shape
+    public class Crossing : UIElement
     {
-        Line horiLine, vertLine;
-        double length;
+        public Line horiLine, vertLine;
+        public double length;
+
         public Crossing(double len)
         {
             length = len;
 
-            horiLine = new Line
-            {
-                X1 = 0,
-                Y1 = 0,
-                X2 = len
-            };
+            // Create the horizontal line
+            horiLine = new Line();
+            horiLine.X1 = 0;
+            horiLine.Y1 = 0;
+            horiLine.X2 = len;
             horiLine.Y2 = horiLine.Y1;
 
-            vertLine = new Line
-            {
-                X1 = 0,
-                Y1 = 0
-            };
+            // horizontal line position
+            horiLine.HorizontalAlignment = HorizontalAlignment.Left;
+            horiLine.VerticalAlignment = VerticalAlignment.Top;
+
+            horiLine.StrokeThickness = 3;
+            horiLine.Visibility = Visibility.Hidden;
+            horiLine.IsEnabled = false;
+
+
+            // Create the vertical line
+            vertLine = new Line();
+            vertLine.X1 = 0;
+            vertLine.Y1 = 0;
             vertLine.X2 = vertLine.X1;
             vertLine.Y2 = len;
+            // vertical line position
+            vertLine.HorizontalAlignment = HorizontalAlignment.Left;
+            vertLine.VerticalAlignment = VerticalAlignment.Top;
+
+            vertLine.StrokeThickness = 3;
+            vertLine.Visibility = Visibility.Hidden;
+            vertLine.IsEnabled = false;
         }
 
 
-        public void Show_Crossing_OTopLeft(int[] cPoint_Pos_OTopLeft)
+        public void Show_Crossing_OTopLeft(int[] cPoint_Pos_OTopLeft, SolidColorBrush brush_Stroke)
         {/*     Show  Crossing Containing One Horizontal Line and One Vertical Line at cPoint_Pos_OTopLeft
             *   centerPoint_Pos_OCenter: The Center Point X, Y Position of the Two Lines Intersect, Origin at Top Left
             * 
              */
 
             int x0 = cPoint_Pos_OTopLeft[0], y0 = cPoint_Pos_OTopLeft[1];
-            horiLine.X1 = x0 - length / 2;
-            horiLine.X2 = x0 + length / 2;
-            horiLine.Y1 = y0;
-            horiLine.Y2 = y0;
+            horiLine.Margin = new Thickness(x0 - length / 2, y0, 0, 0);
+            vertLine.Margin = new Thickness(x0, y0 - length / 2, 0, 0);
 
-            vertLine.X1 = x0;
-            vertLine.X2 = x0;
-            vertLine.Y1 = y0 - length / 2;
-            vertLine.Y2 = y0 + length / 2;
-
+            horiLine.Stroke = brush_Stroke;
+            vertLine.Stroke = brush_Stroke;
 
             horiLine.Visibility = Visibility.Visible;
             vertLine.Visibility = Visibility.Visible;
@@ -196,7 +206,5 @@ namespace TasksShared
             horiLine.Visibility = Visibility.Hidden;
             vertLine.Visibility = Visibility.Hidden;
         }
-
-        protected override Geometry DefiningGeometry => throw new System.NotImplementedException();
     }
 }
