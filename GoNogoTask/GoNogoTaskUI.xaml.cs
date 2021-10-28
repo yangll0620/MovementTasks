@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System.Reflection;
 using System.Windows.Media;
 
+
 namespace GoNogoTask
 {
     /// <summary>
@@ -27,6 +28,8 @@ namespace GoNogoTask
         swf.Screen presentTouchScreen;
 
         GoNogoTask_PresentWin goNogoTask_PresentWin;
+
+        int blockNum;
 
         public MainWindow()
         {
@@ -300,8 +303,15 @@ namespace GoNogoTask
 
         private void btnStart_Click(object sender, RoutedEventArgs e)
         {
+            InputBlockDialog inputDialog = new InputBlockDialog("Input Block Number:");
+            if (inputDialog.ShowDialog() == true)
+                blockNum = int.Parse(inputDialog.Answer);
+
+
+
+
             // save all the Input parameters
-            saveTaskInf2Savedfile();
+            saveTaskInf2Savedfile(blockNum);
 
             btn_start.IsEnabled = false;
             btn_stop.IsEnabled = true;
@@ -324,7 +334,7 @@ namespace GoNogoTask
             goNogoTask_PresentWin.Present_Start();
         }
 
-        private void saveTaskInf2Savedfile()
+        private void saveTaskInf2Savedfile(int blockNum)
         {
             DateTime time_now = DateTime.Now;
 
@@ -338,7 +348,7 @@ namespace GoNogoTask
                 System.IO.Directory.CreateDirectory(savedFolder);
             }
 
-            string filename_saved = textBox_NHPName.Text + time_now.ToString("-yyyyMMdd-HHmmss") + ".txt";
+            string filename_saved = textBox_NHPName.Text + time_now.ToString("-yyyyMMdd-HHmmss") + "-" + blockNum.ToString() + ".txt";
             file_saved = System.IO.Path.Combine(savedFolder, filename_saved);
 
             using (StreamWriter file = new StreamWriter(file_saved))

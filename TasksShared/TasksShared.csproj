@@ -61,11 +61,18 @@
     </ApplicationDefinition>
     <Compile Include="BaseTaskConfig.cs" />
     <Compile Include="GoNogoTaskConfig.cs" />
+    <Compile Include="InputBlockDialog.xaml.cs">
+      <DependentUpon>InputBlockDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ScreenDetect.cs" />
     <Compile Include="SerialPortIO8Manipulate.cs" />
     <Compile Include="ShapeManipulate.cs" />
     <Compile Include="TouchTaskConfig.cs" />
     <Compile Include="Utility.cs" />
+    <Page Include="InputBlockDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
