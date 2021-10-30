@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TasksShared"
         mc:Ignorable="d"
-        Title="Input Block Number" Height="150" Width="200">
+        Title="Input Block Number" Height="150" Width="300">
     <Grid Margin="15">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -18,12 +18,12 @@
                 <ColumnDefinition  Width="*"/>
             </Grid.ColumnDefinitions>
             <Label Name="label_Question" Grid.Column="0" Margin="0,10,10,0"
-                   HorizontalAlignment="Right" VerticalAlignment="Top" Content="Block #"/>
+                   HorizontalAlignment="Right" VerticalAlignment="Top" Content="Block #" Height="30" Width="auto"/>
             <TextBox Name="textbox_Answer" Grid.Column="1" Margin="0,10,0,0"
-                     HorizontalAlignment="Left" VerticalAlignment="Top" Height="30" Width="75"/>
+                     HorizontalAlignment="Left" VerticalAlignment="Top" Height="30" Width="75" TextChanged="Textbox_Answer_TextChanged"/>
         </Grid>
 
-        <Button IsDefault="True" Name="btnOK" Content="OK" Grid.Row="2" Height="25" Width="30"
+        <Button Name="btnOK"  Content="OK" Grid.Row="2" Height="25" Width="30"
                 Margin="0,0,25,5" HorizontalAlignment="Right" VerticalAlignment="Bottom"
                 Click="BtnOK_Click" MinWidth="60"  IsEnabled="False"/>
     </Grid>

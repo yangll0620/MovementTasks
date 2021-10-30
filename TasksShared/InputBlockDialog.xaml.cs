@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -33,6 +34,18 @@ namespace TasksShared
         public string Answer
         {
             get { return textbox_Answer.Text; }
+        }
+
+        private void Textbox_Answer_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var textboxSender = (TextBox)sender;
+            var cursorPosition = textboxSender.SelectionStart;
+            textboxSender.Text = Regex.Replace(textboxSender.Text, "[^0-9]", "");
+            textboxSender.SelectionStart = cursorPosition;
+            if (!String.IsNullOrEmpty(textbox_Answer.Text))
+                btnOK.IsEnabled = true;
+            else
+                btnOK.IsEnabled = false;
         }
     }
 }

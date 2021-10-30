@@ -59,17 +59,15 @@ namespace GoNogoTask
 
             // Get the touch Screen
             presentTouchScreen = ScreenDetect.TaskPresentTouchScreen();
-            
+
 
             if (serialPortIO8_name != null)
             {
                 btn_start.IsEnabled = true;
-                btn_stop.IsEnabled = false;
             }
             else
             {
                 btn_start.IsEnabled = false;
-                btn_stop.IsEnabled = false;
             }
         }
 
@@ -110,8 +108,6 @@ namespace GoNogoTask
             configFile == '': load the default Config File
             */
 
-
-            System.Windows.MessageBox.Show(Directory.GetCurrentDirectory());
 
             // Read the Config. File and convert to JsonObject
             if (String.Equals(configFile, "defaultConfig"))
@@ -305,33 +301,36 @@ namespace GoNogoTask
         {
             InputBlockDialog inputDialog = new InputBlockDialog("Input Block Number:");
             if (inputDialog.ShowDialog() == true)
-                blockNum = int.Parse(inputDialog.Answer);
-
-
-
-
-            // save all the Input parameters
-            saveTaskInf2Savedfile(blockNum);
-
-            btn_start.IsEnabled = false;
-            btn_stop.IsEnabled = true;
-            btn_resume.IsEnabled = false;
-            btn_pause.IsEnabled = true;
-
-
-            // Show the taskpresent Window on the Touch Screen
-            goNogoTask_PresentWin = new GoNogoTask_PresentWin(this)
             {
-                Top = presentTouchScreen.Bounds.Top,
-                Left = presentTouchScreen.Bounds.Left,
-                Name = taskName + "_Win",
-                Owner = this
-            };
+                blockNum = int.Parse(inputDialog.Answer);
+                
+                // save all the Input parameters
+                saveTaskInf2Savedfile(blockNum);
+
+                btn_start.IsEnabled = false;
+                btn_stop.IsEnabled = true;
+                btn_resume.IsEnabled = false;
+                btn_pause.IsEnabled = true;
 
 
-            // Start the Task
-            goNogoTask_PresentWin.Show();
-            goNogoTask_PresentWin.Present_Start();
+                // Show the taskpresent Window on the Touch Screen
+                goNogoTask_PresentWin = new GoNogoTask_PresentWin(this)
+                {
+                    Top = presentTouchScreen.Bounds.Top,
+                    Left = presentTouchScreen.Bounds.Left,
+                    Name = taskName + "_Win",
+                    Owner = this
+                };
+
+
+                // Start the Task
+                goNogoTask_PresentWin.Show();
+                goNogoTask_PresentWin.Present_Start();
+            }   
+            else
+            {
+                System.Windows.MessageBox.Show("No Block Number");
+            }
         }
 
         private void saveTaskInf2Savedfile(int blockNum)

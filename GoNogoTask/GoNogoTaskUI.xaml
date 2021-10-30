@@ -292,7 +292,7 @@
                         Content="Stop" HorizontalAlignment="Right" VerticalAlignment="Bottom" 
                         Margin="0,0,20,15"  Width="100" Height="35" 
                         FontWeight="Bold" FontFamily="Microsoft Sans Serif" FontSize="14"
-                        Click="Btn_stop_Click"/>
+                        Click="Btn_stop_Click" IsEnabled="False"/>
 
                 <Button x:Name="btn_pause" 
                     Content="Pause" HorizontalAlignment="Left" VerticalAlignment="Bottom"
