@@ -7,7 +7,8 @@ using TasksShared;
 using Newtonsoft.Json;
 using System.Reflection;
 using System.Windows.Media;
-
+using System.Windows.Interop;
+using System.Windows.Input;
 
 namespace GoNogoTask
 {
@@ -222,7 +223,7 @@ namespace GoNogoTask
 
         private void Btn_comReconnect_Click(object sender, RoutedEventArgs e)
         {
-
+            CheckIO8Connection();
         }
 
         private void btnLoadConf_Click(object sender, RoutedEventArgs e)
@@ -301,11 +302,16 @@ namespace GoNogoTask
 
         private void btnStart_Click(object sender, RoutedEventArgs e)
         {
+            Presentation_Start();
+        }
+
+        private void Presentation_Start()
+        {
             InputBlockDialog inputDialog = new InputBlockDialog("Input Block Number:");
             if (inputDialog.ShowDialog() == true)
             {
                 blockNum = int.Parse(inputDialog.Answer);
-                
+
                 // save all the Input parameters
                 saveTaskInf2Savedfile(blockNum);
 
@@ -328,11 +334,26 @@ namespace GoNogoTask
                 // Start the Task
                 goNogoTask_PresentWin.Show();
                 goNogoTask_PresentWin.Present_Start();
-            }   
+            }
             else
             {
                 MessageBox.Show("No Block Number");
             }
+        }
+
+        private void Presentation_Stop()
+        {
+
+        }
+
+        private void Presentation_Pause()
+        {
+
+        }
+
+        private void Presentation_Resume()
+        {
+
         }
 
         private void saveTaskInf2Savedfile(int blockNum)
@@ -409,10 +430,88 @@ namespace GoNogoTask
             goNogoTaskConfig.NHPName = textBox_NHPName.Text;
         }
 
-        public void ResumeBtnStartStop()
+        public void ResumeBtnStartStopStatus()
         {
             btn_start.IsEnabled = BtnStartState;
             btn_stop.IsEnabled = BtnStopState;
+        }
+
+
+        // Following codes for Checking Specific Key is Pressed 
+        void InitializeHook()
+        {
+            var windowHelper = new WindowInteropHelper(this);
+            var windowSource = HwndSource.FromHwnd(windowHelper.Handle);
+
+            windowSource.AddHook(MessagePumpHook);
+        }
+        void UninitializeHook()
+        {
+            var windowHelper = new WindowInteropHelper(this);
+            var windowSource = HwndSource.FromHwnd(windowHelper.Handle);
+
+            windowSource.RemoveHook(MessagePumpHook);
+        }
+
+        IntPtr MessagePumpHook(IntPtr handle, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        {
+            if (msg == TaskHotKeys.WM_HOTKEY)
+            {
+                if ((int)wParam == TaskHotKeys.HotKeyId_Start)
+                {
+                    // The hotkey has been pressed, do something!
+                    Presentation_Start();
+                    handled = true;
+                }
+                else if ((int)wParam == TaskHotKeys.HotKeyId_Stop)
+                {
+                    // The hotkey has been pressed, do something!
+                    Presentation_Stop();
+
+                    handled = true;
+                }
+                else if ((int)wParam == TaskHotKeys.HotKeyId_Pause)
+                {
+                    // The hotkey has been pressed, do something!
+                    Presentation_Pause();
+
+                    handled = true;
+                }
+                else if ((int)wParam == TaskHotKeys.HotKeyId_Resume)
+                {
+                    // The hotkey has been pressed, do something!
+                    Presentation_Resume();
+
+                    handled = true;
+                }
+            }
+
+            return IntPtr.Zero;
+        }
+        void InitializeHotKey(Key key, int hotkeyId)
+        {
+            var windowHelper = new WindowInteropHelper(this);
+
+            // You can specify modifiers such as SHIFT, ALT, CONTROL, and WIN.
+            // Remember to use the bit-wise OR operator (|) to join multiple modifiers together.
+            uint modifiers = (uint)ModifierKeys.None;
+
+            // We need to convert the WPF Key enumeration into a virtual key for the Win32 API!
+            uint virtualKey = (uint)KeyInterop.VirtualKeyFromKey(key);
+            TaskHotKeys.RegisterHotKey(windowHelper.Handle, hotkeyId, modifiers, virtualKey);
+
+        }
+        void UninitializeHotKey(int hotkeyId)
+        {
+            var windowHelper = new WindowInteropHelper(this);
+            TaskHotKeys.UnregisterHotKey(windowHelper.Handle, hotkeyId);
+        }
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+            InitializeHook();
+
+            InitializeHotKey(TaskHotKeys.key_Start, TaskHotKeys.HotKeyId_Start);
         }
     }
 }

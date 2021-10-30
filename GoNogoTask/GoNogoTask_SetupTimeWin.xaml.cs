@@ -40,19 +40,19 @@ namespace GoNogoTask
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            parentMainUI.ResumeBtnStartStop();
+            parentMainUI.ResumeBtnStartStopStatus();
         }
 
         private void Btn_OK_Click(object sender, RoutedEventArgs e)
         {
             SaveTimeData();
-            parentMainUI.ResumeBtnStartStop();
+            parentMainUI.ResumeBtnStartStopStatus();
             this.Close();
         }
 
         private void Btn_Cancel_Click(object sender, RoutedEventArgs e)
         {
-            parentMainUI.ResumeBtnStartStop();
+            parentMainUI.ResumeBtnStartStopStatus();
             this.Close();
         }
 

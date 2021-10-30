@@ -91,7 +91,7 @@ namespace GoNogoTask
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            parentMainUI.ResumeBtnStartStop();
+            parentMainUI.ResumeBtnStartStopStatus();
         }
 
         private void ListBox_Positions_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -148,7 +148,7 @@ namespace GoNogoTask
         private void Btn_OK_Click(object sender, RoutedEventArgs e)
         {
             SaveTargetData();
-            parentMainUI.ResumeBtnStartStop();
+            parentMainUI.ResumeBtnStartStopStatus();
             this.Close();
         }
 
@@ -320,7 +320,7 @@ namespace GoNogoTask
 
         private void Btn_Cancel_Click(object sender, RoutedEventArgs e)
         {
-            parentMainUI.ResumeBtnStartStop();
+            parentMainUI.ResumeBtnStartStopStatus();
             this.Close();
         }
 

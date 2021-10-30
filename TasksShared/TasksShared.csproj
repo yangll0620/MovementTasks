@@ -61,6 +61,7 @@
     </ApplicationDefinition>
     <Compile Include="BaseTaskConfig.cs" />
     <Compile Include="GoNogoTaskConfig.cs" />
+    <Compile Include="TaskHotKeys.cs" />
     <Compile Include="InputBlockDialog.xaml.cs">
       <DependentUpon>InputBlockDialog.xaml</DependentUpon>
     </Compile>

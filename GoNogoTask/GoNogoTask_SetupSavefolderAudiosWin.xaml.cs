@@ -36,7 +36,7 @@ namespace GoNogoTask
         private void Btn_OK_Click(object sender, RoutedEventArgs e)
         {
             SaveSavefolderAudiosData();
-            parentMainUI.ResumeBtnStartStop();
+            parentMainUI.ResumeBtnStartStopStatus();
             this.Close();
         }
 
@@ -50,7 +50,7 @@ namespace GoNogoTask
 
         private void Btn_Cancel_Click(object sender, RoutedEventArgs e)
         {
-            parentMainUI.ResumeBtnStartStop();
+            parentMainUI.ResumeBtnStartStopStatus();
             this.Close();
         }
 
