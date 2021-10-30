@@ -16,6 +16,8 @@ namespace GoNogoTask
     /// </summary>
     public partial class MainWindow : Window
     {
+        private static readonly string defaultSaveFolder = @"C:\\";
+
         private string taskName;
         public string serialPortIO8_name;
         public string file_saved;
@@ -120,7 +122,7 @@ namespace GoNogoTask
 
             // Set the default savefolder, audios
             if (String.Equals(goNogoTaskConfig.savedFolder, "default"))
-                goNogoTaskConfig.savedFolder = @"C:\\" + taskName;
+                goNogoTaskConfig.savedFolder = defaultSaveFolder + taskName;
 
             if (String.Equals(goNogoTaskConfig.audioFile_Correct, "default"))
             {
@@ -329,7 +331,7 @@ namespace GoNogoTask
             }   
             else
             {
-                System.Windows.MessageBox.Show("No Block Number");
+                MessageBox.Show("No Block Number");
             }
         }
 
@@ -340,15 +342,15 @@ namespace GoNogoTask
             // if saved_folder not exist, created!
             string savedFolder = goNogoTaskConfig.savedFolder;
             if (String.Equals(savedFolder, "default"))
-                savedFolder = @"C:\\" + taskName;
+                savedFolder = defaultSaveFolder + taskName;
 
             if (Directory.Exists(savedFolder) == false)
             {
-                System.IO.Directory.CreateDirectory(savedFolder);
+                Directory.CreateDirectory(savedFolder);
             }
 
-            string filename_saved = textBox_NHPName.Text + time_now.ToString("-yyyyMMdd-HHmmss") + "-" + blockNum.ToString() + ".txt";
-            file_saved = System.IO.Path.Combine(savedFolder, filename_saved);
+            string filename_saved = textBox_NHPName.Text + time_now.ToString("-yyyyMMdd-HHmmss") + "-Block" + blockNum.ToString() + ".txt";
+            file_saved = Path.Combine(savedFolder, filename_saved);
 
             using (StreamWriter file = new StreamWriter(file_saved))
             {
