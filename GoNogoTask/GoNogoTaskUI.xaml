@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GoNogoTask"
         mc:Ignorable="d"
-        Title="GonoGoTask" Height="800" Width="850"
+        Title="GoNogoTask" Height="800" Width="850"
         Closing="Window_Closing" Loaded="Window_Loaded"
         Icon="GonoGo2.ico">
     <Canvas x:Name="canvas1"
@@ -26,6 +26,10 @@
                     <MenuItem Header="_Time Setting" Click="MenuItem_SetupTime"/>
                     <MenuItem Header="_Target Setting" Click="MenuItem_SetupTarget"/>
                     <MenuItem Header="_Save/Audio Setting" Click="MenuItem_SetupSaveFolderAudio"/>
+                </MenuItem>
+                <MenuItem Header="_Help">
+                    <MenuItem Header="_View Documentation" Click="MenuItem_Documentation"/>
+                    <MenuItem Header="_About" Click="MenuItem_About"/>
                 </MenuItem>
             </Menu>
         </DockPanel>
