@@ -506,6 +506,12 @@ namespace GoNogoTask
             var windowHelper = new WindowInteropHelper(this);
             TaskHotKeys.UnregisterHotKey(windowHelper.Handle, hotkeyId);
         }
+
+        private void MenuItem_About(object sender, RoutedEventArgs e)
+        {
+            GoNogoTask_AboutWin Win_About = new GoNogoTask_AboutWin();
+        }
+
         protected override void OnSourceInitialized(EventArgs e)
         {
             base.OnSourceInitialized(e);

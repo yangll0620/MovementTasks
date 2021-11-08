@@ -72,6 +72,10 @@
       <DependentUpon>GoNogoTaskUI.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="GoNogoTask_AboutWin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="GoNogoTask_PresentWin.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -94,6 +98,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GoNogoTask_AboutWin.xaml.cs">
+      <DependentUpon>GoNogoTask_AboutWin.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GoNogoTask_PresentWin.xaml.cs">
       <DependentUpon>GoNogoTask_PresentWin.xaml</DependentUpon>
     </Compile>
