@@ -10,8 +10,10 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <Label Content="@2021 Neuromodulation Research Center" Grid.Row="0"/>
-        <Label Content="Developed by Lingling Yang" Grid.Row="1"/>
+        <Label Content="Developed by Lingling Yang" Grid.Row="2"/>
+        <Label Content="Using C# Windows Presentation Foundation, Visual Studio 2019" Grid.Row="1"/>
     </Grid>
 </Window>

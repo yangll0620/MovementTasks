@@ -509,7 +509,13 @@ namespace GoNogoTask
 
         private void MenuItem_About(object sender, RoutedEventArgs e)
         {
-            GoNogoTask_AboutWin Win_About = new GoNogoTask_AboutWin();
+            GoNogoTask_AboutWin Win_About = new GoNogoTask_AboutWin(this);
+            Win_About.Show();
+        }
+
+        private void MenuItem_Documentation(object sender, RoutedEventArgs e)
+        {
+            
         }
 
         protected override void OnSourceInitialized(EventArgs e)

@@ -19,7 +19,7 @@ namespace GoNogoTask
     /// </summary>
     public partial class GoNogoTask_AboutWin : Window
     {
-        public GoNogoTask_AboutWin()
+        public GoNogoTask_AboutWin(MainWindow parent)
         {
             InitializeComponent();
         }
