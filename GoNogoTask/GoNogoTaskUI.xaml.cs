@@ -28,7 +28,7 @@ namespace GoNogoTask
 
         private bool BtnStartState, BtnStopState;
 
-        swf.Screen presentTouchScreen;
+        swf.Screen presentTouchScreen, taskUIScreen;
 
         GoNogoTask_PresentWin goNogoTask_PresentWin;
 
@@ -43,11 +43,13 @@ namespace GoNogoTask
         {
             taskName = "GoNogoTask";
 
-            // Task UI
-            swf.Screen taskUIScreen = ScreenDetect.TaskUIScreen();
-            sd.Rectangle Rect_showTaskUIScreen = taskUIScreen.Bounds;
-            this.Top = Rect_showTaskUIScreen.Top;
-            this.Left = Rect_showTaskUIScreen.Left;
+            // Get the mainUI and touch Screen
+            taskUIScreen = ScreenDetect.TaskUIScreen();
+            presentTouchScreen = ScreenDetect.TaskPresentTouchScreen();
+            
+            // TaskUI shown in taskUIScreen
+            this.Top = taskUIScreen.Bounds.Top;
+            this.Left = taskUIScreen.Bounds.Left;
 
 
             // Check serial Port IO8 Connection
@@ -59,9 +61,6 @@ namespace GoNogoTask
             LoadConfigFile("defaultConfig");
 
             ShowMainConfig();
-
-            // Get the touch Screen
-            presentTouchScreen = ScreenDetect.TaskPresentTouchScreen();
 
 
             if (serialPortIO8_name != null)
@@ -307,7 +306,12 @@ namespace GoNogoTask
 
         private void Presentation_Start()
         {
-            InputBlockDialog inputDialog = new InputBlockDialog("Input Block Number:");
+            InputBlockDialog inputDialog = new InputBlockDialog("Input Block Number:")
+            {
+                Top = taskUIScreen.Bounds.Top,
+                Left = taskUIScreen.Bounds.Left,
+                Owner = this
+            };
             if (inputDialog.ShowDialog() == true)
             {
                 blockNum = int.Parse(inputDialog.Answer);
