@@ -673,7 +673,8 @@ namespace GoNogoTask
                 file.WriteLine(String.Format("{0, -40}:  {1}", "Unit of Event TimePoint/Time", "Second"));
                 file.WriteLine("\n");
 
-                file.WriteLine(String.Format("{0, -40}:  {1}", "Optional Target Positions in Pixal", "Origin at TopLeft, Down Right is Positive"));
+                file.WriteLine(String.Format("{0, -40}:  {1}", "Target Diameter in Pixal", targetDiameterPixal.ToString()));
+                file.WriteLine(String.Format("{0, -40}:  {1}", "Optional Target Positions in Pixal", "Origin at TopLeft, Right and Down Direction is Positive"));
                 for (int i = 0; i < optPostions_OTopLeft_List.Count; i++)
                 {
                     int[] position = optPostions_OTopLeft_List[i];
@@ -1524,7 +1525,7 @@ namespace GoNogoTask
                 distance = Point.Subtract(circleGo_centerPoint_Pixal, touchp).Length;
 
 
-                if (distance <= targetDiameterPixal)
+                if (distance <= targetDiameterPixal /2)
                 {// Hit 
 
                     serialPort_IO8.WriteLine(TDTCmd_GoTouchedHit);
