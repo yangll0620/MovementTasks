@@ -350,6 +350,8 @@ namespace COTTask
                         file.WriteLine("XY Position Unit is Pixal, (0,0) in Screen Top Left Corner");
                         file.WriteLine("Unit of Event TimePoint/Time is second");
                         file.WriteLine("\n\n");
+
+                        file.WriteLine(String.Format("{0, -40}:, {1}", "Target Radius in Pixal", circleGo_Radius_Pixal.ToString()));
                     }
 
                     file.WriteLine(String.Format("{0, -40}: {1}", "BlockN", blockN.ToString()));
