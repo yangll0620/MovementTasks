@@ -43,22 +43,42 @@ namespace MovementTaskUI
 
             // Open Selected Task
             string movementTaskFolder = Path.GetFullPath(@"..\\..\\..\\");
-            string debugSubPath = Path.Combine("bin", "Debug");
-            string taskExeFileName = Path.Combine(movementTaskFolder, taskPrjName, debugSubPath, taskPrjName + ".exe");
-            try
+            string taskbinfolder = Path.Combine(movementTaskFolder, taskPrjName, "bin");
+            string deSubExe = Path.Combine(taskbinfolder, "Debug", taskPrjName + ".exe");
+            string reSubExe = Path.Combine(taskbinfolder, "Release", taskPrjName + ".exe");
+            string taskExeFileName = "";
+            
+
+            if(File.Exists(reSubExe))
             {
-                using (Process taskProcess = new Process())
+                taskExeFileName = reSubExe;
+            }
+            else if(File.Exists(deSubExe))
+            {
+                taskExeFileName=deSubExe;
+            }
+            if(!String.IsNullOrEmpty(taskExeFileName))
+            {
+                try
                 {
-                    taskProcess.StartInfo.UseShellExecute = false;
-                    taskProcess.StartInfo.FileName = taskExeFileName;
-                    taskProcess.StartInfo.CreateNoWindow = true;
-                    taskProcess.Start();
+                    using (Process taskProcess = new Process())
+                    {
+                        taskProcess.StartInfo.UseShellExecute = false;
+                        taskProcess.StartInfo.FileName = taskExeFileName;
+                        taskProcess.StartInfo.CreateNoWindow = true;
+                        taskProcess.Start();
+                    }
+                }
+                catch (Exception error)
+                {
+                    MessageBox.Show(error.Message, "Can't Open Task");
                 }
             }
-            catch (Exception error)
+            else
             {
-                MessageBox.Show(error.Message, "Can't Open Task");
+                MessageBox.Show(taskPrjName + ".exe not exist");
             }
+            
         }
     }
 

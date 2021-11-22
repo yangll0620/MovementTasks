@@ -72,7 +72,7 @@ namespace COTTask
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            taskName = "COT";
+            taskName = "COTTask";
 
             btn_start.IsEnabled = false;
             btn_stop.IsEnabled = false;
@@ -391,7 +391,8 @@ namespace COTTask
             string jsonStr;
             if (String.Equals(configFile, "defaultConfig"))
             {
-                configFile = @"..\\..\\Resources\\ConfigFiles\\defaultConfig.json";
+                string movementTaskFolder = Path.GetFullPath(@"..\\..\\..\\");
+                configFile = Path.Combine(movementTaskFolder, taskName, "Resources", "ConfigFiles", "defaultConfig.json");
             }
 
             using (StreamReader r = new StreamReader(configFile))
