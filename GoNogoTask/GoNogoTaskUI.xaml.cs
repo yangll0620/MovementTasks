@@ -20,7 +20,7 @@ namespace GoNogoTask
         private static readonly string defaultSaveFolder = @"C:\\";
 
         private string taskName;
-        public string serialPortIO8_name;
+        public string serialPortIO8_name = "";
         public string file_saved;
 
 
@@ -63,13 +63,13 @@ namespace GoNogoTask
             ShowMainConfig();
 
 
-            if (serialPortIO8_name != null)
+            if (String.Equals(serialPortIO8_name, ""))
             {
-                btn_start.IsEnabled = true;
+                btn_start.IsEnabled = false;
             }
             else
             {
-                btn_start.IsEnabled = false;
+                btn_start.IsEnabled = true;
             }
         }
 
