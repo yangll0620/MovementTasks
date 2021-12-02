@@ -15,8 +15,12 @@ This is a C# Wpf version of the presentation program in the touch screen of the 
 
 
 
-### Issues:
+### Issues: (from Ziling)
 1. Stop Bug.
+2. com can't find when opened. Should be unplug and plug in.
+3. Still has touched into gomiss cases
+4. When input name, s can't be input as used for start hotkey.
+5. Target 2 has no records.
 
 
 ### ToDo List
@@ -33,21 +37,5 @@ This is a C# Wpf version of the presentation program in the touch screen of the 
 2. Automatically get the property name
 3. Use table for each target realtime info feedback
 
-
-### Done
-2. Run in session, stop until the experimenter click stop button (Done)
-	trialNumPerSession = totalTrialNum/pos/Session * totalPosNum, 
-	totalTrialNum = goTrialNum/pos/Session + noGoTrialNum/pos/Session
-3. Change event code according to COT task (Done)
-	3-1 Write to the save file of the event codes(Done)
-4. Add 0000 after each trial (Done)
-5. Implement the new main interface as Guo drawed (Done)
-	(1) Each Target Realtime Info Feedback (Done)
-	(2) Session Realtime Info Feedback(Done)
-6. Move and Implement savefolder/audiosetup into menu(Done)
-8. Generate, modify and save optPostions_OCenter_List function (Done)
-9. Show circleGo and rectNogo the same as those in COT task (Done)
-11. Cue position Incorrect (Done)
-12. Test Show Target and Actual Target Position during Task (Done)
 
 
