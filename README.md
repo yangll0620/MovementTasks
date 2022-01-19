@@ -37,5 +37,6 @@ This is a C# Wpf version of the presentation program in the touch screen of the 
 2. Automatically get the property name
 3. Use table for each target realtime info feedback
 
-
+### Easy way to do
+1. Add the gonogotask_wpf .exe as for COTtask
 
